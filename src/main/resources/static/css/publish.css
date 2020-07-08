@@ -1,0 +1,22 @@
+.db-error {
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
+}
+
+.db-success{
+    margin-top: 10px;
+    color: #33cabb;
+    font-weight: bold;
+}
+.publish-nav-tabs .nav-item:hover {
+    cursor:pointer;
+}
+.publish-config-close {
+    float: right;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.publish-config-close:hover {
+    cursor: pointer;
+}

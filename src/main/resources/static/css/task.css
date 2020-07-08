@@ -1,0 +1,20 @@
+.steps-bar .step {
+    width: 49%;
+    display: table-cell;
+    position: relative;
+}
+.steps-bar .bar {
+    margin: 10px 10px 0px 40px;
+    width: auto;
+    height: 6px;
+    /* vertical-align: middle; */
+    /* -webkit-border-radius: 4px; */
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #d3d3d3;
+}
+
+.cron-popover {
+    max-width: 500px !important;
+    background-color: gainsboro;
+}

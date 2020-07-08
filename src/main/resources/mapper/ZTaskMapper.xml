@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.yulegou.zeus.dao.mapper.ZTaskMapper">
+  <resultMap id="BaseResultMap" type="top.yulegou.zeus.dao.domain.ZTask">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="t_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="t_module" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="t_auto" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="last_caiji" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_create" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_modified" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="cron" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="top.yulegou.zeus.dao.domain.ZTask">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="t_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="t_module" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="t_auto" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="last_caiji" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_create" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="gmt_modified" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="cron" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="t_config" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, t_name, group_id, t_module, t_auto, last_caiji, gmt_create, gmt_modified, cron, 
+    status
+  </sql>
+  <sql id="Blob_Column_List">
+    t_config
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="top.yulegou.zeus.dao.domain.ZTaskExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zeus_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zeus_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zeus_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zeus_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskExample">
+    delete from zeus_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="top.yulegou.zeus.dao.domain.ZTask">
+    insert into zeus_task (id, t_name, group_id, 
+      t_module, t_auto, last_caiji, 
+      gmt_create, gmt_modified, cron, 
+      status, t_config)
+    values (#{id,jdbcType=INTEGER}, #{tName,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER}, 
+      #{tModule,jdbcType=VARCHAR}, #{tAuto,jdbcType=TINYINT}, #{lastCaiji,jdbcType=BIGINT}, 
+      #{gmtCreate,jdbcType=BIGINT}, #{gmtModified,jdbcType=BIGINT}, #{cron,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{tConfig,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="top.yulegou.zeus.dao.domain.ZTask" useGeneratedKeys="true" keyProperty="id">
+    insert into zeus_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tName != null">
+        t_name,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="tModule != null">
+        t_module,
+      </if>
+      <if test="tAuto != null">
+        t_auto,
+      </if>
+      <if test="lastCaiji != null">
+        last_caiji,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="cron != null">
+        cron,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="tConfig != null">
+        t_config,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tName != null">
+        #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="tModule != null">
+        #{tModule,jdbcType=VARCHAR},
+      </if>
+      <if test="tAuto != null">
+        #{tAuto,jdbcType=TINYINT},
+      </if>
+      <if test="lastCaiji != null">
+        #{lastCaiji,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="cron != null">
+        #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="tConfig != null">
+        #{tConfig,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskExample" resultType="java.lang.Long">
+    select count(*) from zeus_task
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zeus_task
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.tName != null">
+        t_name = #{record.tName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null">
+        group_id = #{record.groupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tModule != null">
+        t_module = #{record.tModule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tAuto != null">
+        t_auto = #{record.tAuto,jdbcType=TINYINT},
+      </if>
+      <if test="record.lastCaiji != null">
+        last_caiji = #{record.lastCaiji,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtModified != null">
+        gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="record.cron != null">
+        cron = #{record.cron,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.tConfig != null">
+        t_config = #{record.tConfig,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update zeus_task
+    set id = #{record.id,jdbcType=INTEGER},
+      t_name = #{record.tName,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=INTEGER},
+      t_module = #{record.tModule,jdbcType=VARCHAR},
+      t_auto = #{record.tAuto,jdbcType=TINYINT},
+      last_caiji = #{record.lastCaiji,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
+      cron = #{record.cron,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      t_config = #{record.tConfig,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zeus_task
+    set id = #{record.id,jdbcType=INTEGER},
+      t_name = #{record.tName,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=INTEGER},
+      t_module = #{record.tModule,jdbcType=VARCHAR},
+      t_auto = #{record.tAuto,jdbcType=TINYINT},
+      last_caiji = #{record.lastCaiji,jdbcType=BIGINT},
+      gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
+      cron = #{record.cron,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.yulegou.zeus.dao.domain.ZTask">
+    update zeus_task
+    <set>
+      <if test="tName != null">
+        t_name = #{tName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="tModule != null">
+        t_module = #{tModule,jdbcType=VARCHAR},
+      </if>
+      <if test="tAuto != null">
+        t_auto = #{tAuto,jdbcType=TINYINT},
+      </if>
+      <if test="lastCaiji != null">
+        last_caiji = #{lastCaiji,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      </if>
+      <if test="cron != null">
+        cron = #{cron,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="tConfig != null">
+        t_config = #{tConfig,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="top.yulegou.zeus.dao.domain.ZTask">
+    update zeus_task
+    set t_name = #{tName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=INTEGER},
+      t_module = #{tModule,jdbcType=VARCHAR},
+      t_auto = #{tAuto,jdbcType=TINYINT},
+      last_caiji = #{lastCaiji,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      cron = #{cron,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      t_config = #{tConfig,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.yulegou.zeus.dao.domain.ZTask">
+    update zeus_task
+    set t_name = #{tName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=INTEGER},
+      t_module = #{tModule,jdbcType=VARCHAR},
+      t_auto = #{tAuto,jdbcType=TINYINT},
+      last_caiji = #{lastCaiji,jdbcType=BIGINT},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      cron = #{cron,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,37 @@
+.form-group label {
+    font-weight: 600;
+}
+.scrollspy {
+    height: 680px;
+    overflow: auto;
+}
+.scrollspy p{
+    margin: 0;
+}
+.sidebar-header {
+    min-height: 68px;
+}
+.sidebar-header a {
+    margin: 16px 0px;
+}
+body::-webkit-scrollbar {
+    width: 0px;
+}
+.cron-input-group {
+    font-size: 14px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    background-color: #f9fafb;
+    border-color: #F2F3F3;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: .375rem;
+    padding-right: .375rem;
+    margin-bottom: 0;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-align: center;
+    white-space: nowrap;
+}
