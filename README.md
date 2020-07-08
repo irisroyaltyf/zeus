@@ -23,3 +23,6 @@ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - 包管理gradle
   - 版本控制 git
   - 数据库 mysql5.7
+
+#### 功能列表
+   [TODOLIST](./todo.md "TODOLIST")
