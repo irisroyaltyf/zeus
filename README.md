@@ -5,8 +5,7 @@ zeus采集器是一款免费的数据采集发布爬虫软件,采用java,springb
 https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
  google-chrome --headless --remote-debugging-port=9222 https://chromium.org --disable-gpu
 
-
-####技术选型
+#### 技术选型
   - 基础框架 Springboot 2.3.0.RELEASE
   - 持久层框架 mybatis-spring-boot-starter
   - 模板引擎 freemarker
@@ -14,7 +13,7 @@ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - 日志log4j2
   - 其他:quartz, fastjson
  
-####前端
+#### 前端
   - Light Year Admin https://gitee.com/yinqi/Light-Year-Admin-Using-Iframe-v4
   - jquery
   - underscope.js javascript 工具库
