@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.yulegou.zeus.dao.mapper.ZTaskCollectedMapper">
+  <resultMap id="BaseResultMap" type="top.yulegou.zeus.dao.domain.ZTaskCollected">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="url_md5" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="task_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="target" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="des" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="TINYINT" />
+      <arg column="gmt_create" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="title_md5" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, url, url_md5, publish_type, task_id, target, des, status, gmt_create, title_md5
+  </sql>
+  <select id="selectByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollectedExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from zeus_collected
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from zeus_collected
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zeus_collected
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollectedExample">
+    delete from zeus_collected
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollected" useGeneratedKeys="true" keyProperty="id">
+    insert into zeus_collected (id, url, url_md5, 
+      publish_type, task_id, target, 
+      des, status, gmt_create,
+      title_md5)
+    values (#{id,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{urlMd5,jdbcType=VARCHAR}, 
+      #{publishType,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}, #{target,jdbcType=VARCHAR}, 
+      #{des,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{gmtCreate,jdbcType=BIGINT},
+      #{titleMd5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollected" useGeneratedKeys="true" keyProperty="id">
+    insert into zeus_collected
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="urlMd5 != null">
+        url_md5,
+      </if>
+      <if test="publishType != null">
+        publish_type,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="target != null">
+        target,
+      </if>
+      <if test="des != null">
+        des,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="titleMd5 != null">
+        title_md5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="urlMd5 != null">
+        #{urlMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="publishType != null">
+        #{publishType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="target != null">
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null">
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="titleMd5 != null">
+        #{titleMd5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollectedExample" resultType="java.lang.Long">
+    select count(*) from zeus_collected
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update zeus_collected
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.urlMd5 != null">
+        url_md5 = #{record.urlMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishType != null">
+        publish_type = #{record.publishType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskId != null">
+        task_id = #{record.taskId,jdbcType=INTEGER},
+      </if>
+      <if test="record.target != null">
+        target = #{record.target,jdbcType=VARCHAR},
+      </if>
+      <if test="record.des != null">
+        des = #{record.des,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="record.titleMd5 != null">
+        title_md5 = #{record.titleMd5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update zeus_collected
+    set id = #{record.id,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
+      url_md5 = #{record.urlMd5,jdbcType=VARCHAR},
+      publish_type = #{record.publishType,jdbcType=VARCHAR},
+      task_id = #{record.taskId,jdbcType=INTEGER},
+      target = #{record.target,jdbcType=VARCHAR},
+      des = #{record.des,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
+      title_md5 = #{record.titleMd5,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollected">
+    update zeus_collected
+    <set>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="urlMd5 != null">
+        url_md5 = #{urlMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="publishType != null">
+        publish_type = #{publishType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="target != null">
+        target = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null">
+        des = #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      </if>
+      <if test="titleMd5 != null">
+        title_md5 = #{titleMd5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.yulegou.zeus.dao.domain.ZTaskCollected">
+    update zeus_collected
+    set url = #{url,jdbcType=VARCHAR},
+      url_md5 = #{urlMd5,jdbcType=VARCHAR},
+      publish_type = #{publishType,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=INTEGER},
+      target = #{target,jdbcType=VARCHAR},
+      des = #{des,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=BIGINT},
+      title_md5 = #{titleMd5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
