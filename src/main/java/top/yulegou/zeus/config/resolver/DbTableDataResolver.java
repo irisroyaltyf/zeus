@@ -1,4 +1,4 @@
-package top.yulegou.zeus.manager;/*
+package top.yulegou.zeus.config.resolver;/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +12,7 @@ package top.yulegou.zeus.manager;/*
  * limitations under the License.
  */
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.PropertyAccessor;
 import org.springframework.core.MethodParameter;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @author irisroyalty
  * @date 2020/6/29
  **/
+@Slf4j
 public class DbTableDataResolver extends AbstractMessageReaderArgumentResolver {
     public DbTableDataResolver(List<HttpMessageReader<?>> readers) {
         super(readers);
@@ -62,6 +64,7 @@ public class DbTableDataResolver extends AbstractMessageReaderArgumentResolver {
         params.entrySet().stream().forEach(e -> {
             int l = e.getKey().length();
             if (l < 1) {
+                log.info("length less then 1 " + e.getKey());
                 return ;
             }
             if (StringUtils.equals(e.getKey(), "taskId") ){

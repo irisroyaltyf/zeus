@@ -1,17 +1,13 @@
 package top.yulegou.zeus.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.DecoderHttpMessageReader;
 import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-import org.springframework.web.reactive.config.ViewResolverRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
-import org.springframework.web.reactive.result.view.freemarker.FreeMarkerConfigurer;
-import top.yulegou.zeus.manager.DbTableDataResolver;
+import top.yulegou.zeus.config.resolver.DbTableDataResolver;
+import top.yulegou.zeus.config.resolver.ListDataResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +38,7 @@ public class WebConfig implements WebFluxConfigurer {
         readers.add(new DecoderHttpMessageReader<>(new Jackson2JsonDecoder()));
         //消息编解码器与Resolver绑定
         configurer.addCustomResolver(new DbTableDataResolver(readers));
+        configurer.addCustomResolver(new ListDataResolver(readers));
     }
 
 }

@@ -26,9 +26,9 @@ import java.util.Date;
  * @date 2020/7/9
  **/
 @SpringBootTest
-public class ZeusTaskCollectedManagerTest {
+public class ZeusCollectedManagerTest {
     @Autowired
-    ZeusTaskCollectedManager zeusTaskCollectedManager;
+    ZeusCollectedManager zeusCollectedManager;
     @Test
     public void insertTest() {
         ZTaskCollected cl = new ZTaskCollected();
@@ -41,6 +41,6 @@ public class ZeusTaskCollectedManagerTest {
         cl.setStatus(1);
         ZTaskCollected o = JSONObject.parseObject("{\"des\":\"mysql:meimeng@table:shop_bifeng_news@generatedKey:21305\",\"gmtCreate\":1594278922262,\"publishType\":\"DB\",\"status\":1,\"taskId\":2,\"url\":\"https://www.techsir.com/a/202007/65112.html\",\"urlMd5\":\"ffb34fd75d33a635188d8b1f07549f15\"}", ZTaskCollected.class);
 //        {"desc":"mysql:meimeng@table:shop_bifeng_news@generatedKey:21305","gmtCreate":1594278922262,"publishType":"DB","status":1,"taskId":2,"url":"https://www.techsir.com/a/202007/65112.html","urlMd5":"ffb34fd75d33a635188d8b1f07549f15"}
-        System.out.println( zeusTaskCollectedManager.insert(o));
+        System.out.println( zeusCollectedManager.insert(o));
     }
 }

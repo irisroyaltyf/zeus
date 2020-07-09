@@ -4,11 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ZTaskCollectedExample {
+    private static final String URLMD5 = "urlMd5";
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+
+    private Integer limit;
+    private Integer offset;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+    public Integer getLimit() {
+        return limit;
+    }
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+    public Integer getOffset() {
+        return offset;
+    }
 
     public ZTaskCollectedExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -245,62 +261,62 @@ public class ZTaskCollectedExample {
         }
 
         public Criteria andUrlMd5EqualTo(String value) {
-            addCriterion("url_md5 =", value, "urlMd5");
+            addCriterion("url_md5 =", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5NotEqualTo(String value) {
-            addCriterion("url_md5 <>", value, "urlMd5");
+            addCriterion("url_md5 <>", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5GreaterThan(String value) {
-            addCriterion("url_md5 >", value, "urlMd5");
+            addCriterion("url_md5 >", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5GreaterThanOrEqualTo(String value) {
-            addCriterion("url_md5 >=", value, "urlMd5");
+            addCriterion("url_md5 >=", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5LessThan(String value) {
-            addCriterion("url_md5 <", value, "urlMd5");
+            addCriterion("url_md5 <", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5LessThanOrEqualTo(String value) {
-            addCriterion("url_md5 <=", value, "urlMd5");
+            addCriterion("url_md5 <=", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5Like(String value) {
-            addCriterion("url_md5 like", value, "urlMd5");
+            addCriterion("url_md5 like", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5NotLike(String value) {
-            addCriterion("url_md5 not like", value, "urlMd5");
+            addCriterion("url_md5 not like", value, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5In(List<String> values) {
-            addCriterion("url_md5 in", values, "urlMd5");
+            addCriterion("url_md5 in", values, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5NotIn(List<String> values) {
-            addCriterion("url_md5 not in", values, "urlMd5");
+            addCriterion("url_md5 not in", values, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5Between(String value1, String value2) {
-            addCriterion("url_md5 between", value1, value2, "urlMd5");
+            addCriterion("url_md5 between", value1, value2, URLMD5);
             return (Criteria) this;
         }
 
         public Criteria andUrlMd5NotBetween(String value1, String value2) {
-            addCriterion("url_md5 not between", value1, value2, "urlMd5");
+            addCriterion("url_md5 not between", value1, value2, URLMD5);
             return (Criteria) this;
         }
 

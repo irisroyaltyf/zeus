@@ -11,6 +11,16 @@ public class ZTaskCollected {
 
     private Integer taskId;
 
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    private String taskName;
+
     private String target;
 
     private String des;

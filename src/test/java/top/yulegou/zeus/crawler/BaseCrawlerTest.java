@@ -17,12 +17,6 @@ class BaseCrawlerTest {
     private SourceUrlCrawler sourceUrlCrawler;
     @Autowired
     private ContentCrawler contentCrawler;
-    @Test
-    public void CrawlerTest() {
-        BaseCrawler baseCrawler = new BaseCrawler();
-//        String x = baseCrawler.getHtmlContent("http://www.baidu.com");
-//        System.out.println(x);
-    }
 
     @Test
     public void getUrlTest() {

@@ -37,8 +37,8 @@ public class BaseCrawler {
 
 
     public String getHtmlContent(ZTask task, ZCrawlerRule crawlerRule) {
-        ZConfig config =  zeusConfigManager.getCachedConfig("robots");
-        ZConfig auto = zeusConfigManager.getCachedConfig("auto");
+//        ZConfig config =  zeusConfigManager.getCachedConfig("robots");
+//        ZConfig auto = zeusConfigManager.getCachedConfig("auto");
         // TODO 看是否是robot允许的地址 通过或者/robots.txt 去看是否robots定义不能爬取
         // TODO 增加缓存 可能有需要
         ZTaskConfig taskConfig = task.getzTaskConfig();
@@ -47,7 +47,7 @@ public class BaseCrawler {
         }
 
         //TODO 查看代理ip
-        zeusConfigManager.getCachedConfig(zeusConfigManager.PROXY);
+        zeusConfigManager.getCachedConfig(ZeusConfigManager.PROXY);
         ZCrawlerRuleConfig crawlerRuleConfig = crawlerRule.getCrawlerRuleConfig();
         // GET 请求
         if (crawlerRuleConfig.getPost() == null || crawlerRuleConfig.getPost() == false) {

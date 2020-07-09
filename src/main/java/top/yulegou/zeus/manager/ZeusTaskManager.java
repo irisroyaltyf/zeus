@@ -44,7 +44,7 @@ public class ZeusTaskManager {
     @Autowired
     private QuartzManager quartzManager;
     @Autowired
-    ZeusTaskCollectedManager zeusTaskCollectedManager;
+    ZeusCollectedManager zeusCollectedManager;
 
 
     public Flux<String> collectForController(final Integer taskId) throws Exception {
@@ -199,7 +199,7 @@ public class ZeusTaskManager {
                 collected.setTarget(publishResult.getRstMsg().getString("msg"));
                 log.info("失败 " + contentCollectedDTO.getUrl());
             }
-            zeusTaskCollectedManager.insert(collected);
+            zeusCollectedManager.insert(collected);
         });
     }
     public void collect(Integer taskId) {

@@ -18,6 +18,13 @@
                         <li> <a class="multitabs" id="nav-task-add" href="/task/add">添加任务</a> </li>
                     </ul>
                 </li>
+                <li class="nav-item nav-item-has-subnav">
+                    <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> <span>已采集数据</span></a>
+                    <ul class="nav nav-subnav">
+                        <li> <a class="multitabs" id="nav-collected-list" href="/collected/list">数据列表</a> </li>
+<#--                        <li> <a class="multitabs" id="nav-task-add" href="/task/add">添加任务</a> </li>-->
+                    </ul>
+                </li>
             </ul>
         </nav>
 

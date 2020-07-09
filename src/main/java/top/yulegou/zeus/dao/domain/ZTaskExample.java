@@ -10,6 +10,21 @@ public class ZTaskExample {
 
     protected List<Criteria> oredCriteria;
 
+    private Integer limit;
+    private Integer offset;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+    public Integer getLimit() {
+        return limit;
+    }
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+    public Integer getOffset() {
+        return offset;
+    }
+
     public ZTaskExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
