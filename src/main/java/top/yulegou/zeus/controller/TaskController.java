@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.ParallelFlux;
 import top.yulegou.zeus.config.template.RandomId;
+import top.yulegou.zeus.config.template.UUIDTemplateMethod;
 import top.yulegou.zeus.constant.ErrorCode;
 import top.yulegou.zeus.dao.domain.*;
 import top.yulegou.zeus.domain.*;
@@ -127,6 +128,7 @@ public class TaskController extends BaseController {
             }
         }
         model.addAttribute("randomId", new RandomId());
+        model.addAttribute("uuid", new UUIDTemplateMethod());
         model.addAttribute("taskId", taskId);
         return "/task/crawler";
     }

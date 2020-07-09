@@ -16,8 +16,10 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/toast.min.css">
     <link rel="stylesheet" type="text/css" href="/css/base.css">
     <link rel="stylesheet" type="text/css" href="/css/crawler.css">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_1931442_gyy2fbzblp.css">
 </head>
 
 <body>
@@ -130,14 +132,35 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="from_url">起始网址</label>
-                                            <#if crawlerRuleConfig?? && crawlerRuleConfig.fromUrls??>
-                                                <#list crawlerRuleConfig.fromUrls as url>
-                                                    <input type="input" name="fromUrls" class="form-control" id="from_url[]" value="${url}" />
-                                                </#list>
-                                            <#else >
-                                                <input type="input" name="fromUrls" class="form-control" id="from_url[]"  />
-                                            </#if>
+                                            <label for="from_url">起始网址
+                                                <a href="javascript:;" class="add-field" title="添加" style="margin-left: 5px;"
+                                                   data-toggle="modal" data-target="#beginUrlModal"><img src="/imgs/plus.svg" width="18px" height="18px"></a>
+                                            </label>
+                                            <div id="from-urls">
+                                                <#if crawlerRuleConfig?? && crawlerRuleConfig.fromUrls??>
+                                                    <#list crawlerRuleConfig.fromUrls as url>
+                                                        <div class="input-group mb-3">
+                                                            <input type="input" name="fromUrls" class="form-control" value="${url}" id="${uuid()}"/>
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text url-add"><i class="iconfont iconedit"></i></span>
+                                                            </div>
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text url-close"><i class="iconfont iconguanbi"></i> </span>
+                                                            </div>
+                                                        </div>
+                                                    </#list>
+                                                <#else >
+                                                    <div class="input-group mb-3">
+                                                        <input type="input" name="fromUrls" class="form-control" id="${uuid()}"/>
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text url-add"><i class="iconfont iconedit"></i></span>
+                                                        </div>
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text url-close"><i class="iconfont iconguanbi"></i> </span>
+                                                        </div>
+                                                    </div>
+                                                </#if>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                            <input type="checkbox" id="source_is_content_check"
@@ -153,6 +176,69 @@
                                     <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
                                 </div>
                             </form>
+                            <div class="modal fade" id="beginUrlModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h6 class="modal-title" id="fieldModalTitle">添加起始网址</h6>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="begin-url-modal-content">
+                                                <input type="hidden" name="modifyId" id="modifyId">
+                                                <ul class="nav nav-tabs nav-fill"  id="begin-url-tab">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" data-toggle="tab" href="#manual-fill" aria-selected="true">手动指定</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="tab" href="#templ-fill" aria-selected="false">批量生成</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="begin-content-tab tab-pane fade active show" id="manual-fill" role="tabpanel">
+                                                        <span >一行一条列表页网址(http://或https://开头)</span>
+                                                        <textarea id="source_urls" class="form-control" rows="5"></textarea>
+                                                    </div>
+                                                    <div class="begin-content-tab tab-pane fade" id="templ-fill" role="tabpanel">
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">网址格式</span>
+                                                            </div>
+                                                            <input type="input" class="form-control" id="paramUrl" name="paramUrl"/>
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text"><a href="javascript:;" id="addParamsContent">[内容]</a></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="x-line">将 [内容] 替换成</div>
+                                                        <div class="input-group mb-3" source-param="num">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <input type="radio" name="paramType" value="num" checked="checked">
+                                                                数字
+                                                                </span>
+                                                            </div>
+                                                            <div class="form-control url-line">
+                                                                从 <input id="param_num_start" type="number" value="1" class="url-input" >
+                                                                到 <input id="param_num_end" type="number" value="5" class="url-input">
+                                                                递增数 <input id="param_num_inc" type="number" value="1" class="url-input">
+                                                                <label><input type="checkbox" id="param_num_desc"> 倒序</label>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="btn btn-block btn-secondary" id="preview" style="margin-bottom: 10px">预览</button>
+                                                        <textarea class="form-control disabled" rows="5" id="source_preview" readonly="readonly"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary" id="beginUrlSave">保存</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="crawler-card d-none" id="content-url">
                             <form action="/task/crawler/savecontenturl.do" method="post" name="edit-form" class="edit-form" id="contentUrlForm">
@@ -360,10 +446,12 @@
         nav.parents('.nav-item-has-subnav').addClass('open').first().addClass('active');
     });
 </script>
+<script type="text/javascript" src="/js/lib/uuid.min.js"></script>
 <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/lib/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="/js/lib/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="/js/lib/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/js/lib/toast.min.js"></script>
 <script type="text/javascript" src="/js/main.min.js" ></script>
 <script type="text/javascript" src="/js/index.min.js"></script>
 <script type="text/javascript" src="/js/lib/jquery.form.js"></script>

@@ -65,6 +65,13 @@ public class PatternTest {
 
     @Test
     public void machTest6() {
+        Pattern p = Pattern.compile("\\{param:(?<type>\\w+)\\,(?<param>[^\\}]*)\\}");
+        String src = "https://www.techsir.com/reviews/index_{param:num,1\t10\t1\t0}.html";
+        Matcher m = p.matcher(src);
+        while (m.find()) {
+            System.out.println(m.group("type"));
+            System.out.println(m.group("param"));
+        }
         System.out.println(StringUtils.substring("11", 0, 8));
 //        String rst = PregUtil.joinContentMatch("示例：<div id=\"a\">[内容]</div>(*)<div id=\"b\">[内容2]</div>");
 //        System.out.println(rst);

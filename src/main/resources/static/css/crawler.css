@@ -8,3 +8,25 @@
     font-size: 16px;
     margin-left: 4px;
 }
+.url-add {
+    cursor: pointer;
+}
+.url-close {
+    cursor: pointer;
+}
+.x-line {
+    background-color: #eee;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.url-line {
+    padding-left: 50px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+.url-line .url-input{
+    width: 70px;
+    height: 20px;
+    padding: 5px ;
+    font-size: 12px;
+}

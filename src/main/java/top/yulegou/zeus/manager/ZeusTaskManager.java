@@ -63,7 +63,9 @@ public class ZeusTaskManager {
             throw new Exception("起始页为空");
         }
 
-        return Flux.just(urls.toArray(new String[urls.size()]))
+        Set<String> urlSet = sourceUrlCrawler.checkAndExpendFromUrls(urls);
+
+        return Flux.just(urlSet.toArray(new String[urlSet.size()]))
                 .delayElements(Duration.ofSeconds(0)) // delay 会让map 或者flatmap在default scheduler 执行
                 .flatMap(url->{
             List<String> contentUrls = null;

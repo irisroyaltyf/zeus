@@ -139,6 +139,211 @@
             }
         })
     });
+
+    $("#beginUrlSave").on("click", function (e) {
+        var id = $('.begin-content-tab.active').attr("id");
+        var modifyInputId = $("#modifyId").val();
+        var error = undefined;
+        var nodePre = "  <div class=\"input-group mb-3\">\n" +
+            "                                                        <input type=\"input\" name=\"fromUrls\" class=\"form-control\" value='";
+        var nodeMi = "' id='";
+        var nodeEnd = "'/>\n" +
+            "                                                        <div class=\"input-group-prepend\">\n" +
+            "                                                            <span class=\"input-group-text url-add\"><i class=\"iconfont iconedit\"></i></span>\n" +
+            "                                                        </div>\n" +
+            "                                                        <div class=\"input-group-prepend\">\n" +
+            "                                                            <span class=\"input-group-text url-close\"><i class=\"iconfont iconguanbi\"></i> </span>\n" +
+            "                                                        </div>\n" +
+            "                                                    </div>";
+        if (id == "manual-fill") {
+            var sourceUrls = $("#source_urls").val() + "\n";
+            sourceUrls = sourceUrls.replace("\r\n", "\n");
+            var matchUrls = sourceUrls.match(/\w+\:\/\/[^\n]+/i);
+            console.log(matchUrls);
+            if (!matchUrls) {
+                $.toast({
+                    type: 'error',
+                    title: '错误！',
+                    content: '请输入正确的网址',
+                    delay: 5000
+                });
+                return ;
+            }
+            var urls = sourceUrls.split("\n");
+            if (urls.length > 0) {
+                urls = Array.from(new Set(urls));
+                urls.forEach(x=>{
+                    var xtr = x.trim().toLowerCase();
+                    if (xtr.length > 0) {
+                        if (xtr.length >0) {
+                            if (!(xtr.startsWith("http://") || xtr.startsWith("https://"))) {
+                                $.toast({
+                                    type: 'error',
+                                    title: '错误！',
+                                    content: '请输入正确的网址，网址：' + x + "无效",
+                                    delay: 5000
+                                });
+                                error = true;
+                                return;
+                            }
+                        }
+                    }
+                });
+                if(error) {
+                    return ;
+                }
+                let z = 0;
+                for(let i = 0; i< urls.length; ++i) {
+                    var xtr = urls[i].trim().toLowerCase();
+                    if (xtr != "") {
+                        if (z == 0 && modifyInputId) {
+                            $("#" + modifyInputId).val(xtr);
+                        } else {
+                            if ($("input[name='fromUrls'][value='" + xtr +"']").length == 0) {
+                                $("#from-urls").append(nodePre + xtr + nodeMi + Math.uuid() + nodeEnd);
+                            }
+                        }
+                        z ++;
+                    }
+                }
+            }
+        } else if(id == "templ-fill") {
+            let url = paramUrlDo();
+            if (url) {
+                if (modifyInputId) {
+                    $("#" + modifyInputId).val(url);
+                } else {
+                    $("#from-urls").append(nodePre + url + nodeMi + Math.uuid() + nodeEnd);
+                }
+            } else {
+                return;
+            }
+        }
+        $("#modifyId").val("");
+        $("#begin-url-modal-content").clearForm();
+        $("#beginUrlModal").modal("hide");
+    });
+
+    $("#from-urls").on("click",".url-add", function (e) {
+        var modifyInput = $(this).parent().parent().find("input");
+        var url = modifyInput.val();
+
+        $("#modifyId").val(modifyInput.attr("id"));
+        if (url) {
+            var match = url.match(/\{param\:(\w+)\,([^\}]*)\}/i);
+            if (match) {
+                $("#paramUrl").val(url.replace(/\{param\:(\w+)\,([^\}]*)\}/i, "[内容]"));
+                if (match[1] == 'num') {
+                    var paramVal = match[2].split("\t");
+                    $("#param_num_start").val(paramVal[0]);
+                    $("#param_num_end").val(paramVal[1]);
+                    $("#param_num_inc").val(paramVal[2]);
+                    if (paramVal[3] == 1) {
+                        $("#param_num_desc").attr("checked", "checked")
+                    } else {
+                        $("#param_num_desc").attr("checked", false)
+                    }
+                    $("input:radio[name='paramType'][value='num']").prop("checked", true);
+                }
+                $('#begin-url-tab a[href="#templ-fill"]').tab('show');
+            } else {
+                $("#source_urls").val(url);
+                $('#begin-url-tab a[href="#manual-fill"]').tab('show');
+            }
+        }
+
+        $("#beginUrlModal").modal("show");
+    })
+    $("#preview").on("click", function () {
+        paramUrlDo(true);
+    });
+    $("#from-urls").on("click",".url-close", function (e) {
+        $(this).parent().parent().remove();
+    });
+    $("#addParamsContent").on("click", function (e) {
+        var url =$("#paramUrl").val();
+        if (url) {
+            var n = url.search("[内容]");
+            if (n > 0) {
+                $.toast({
+                    type: 'error',
+                    title: '错误！',
+                    content: '在网址中已经存在[内容]',
+                    delay: 5000
+                });
+                return;
+            }
+        }
+        insertAtCaret($("#paramUrl"), "[内容]");
+    })
+    function paramUrlDo(isPreview) {
+        var paramUrl = $("#paramUrl").val();
+        if (paramUrl) {
+            var xtr = paramUrl.trim();
+            if (!(xtr.startsWith("http://") || xtr.startsWith("https://"))) {
+                $.toast({
+                    type: 'error',
+                    title: '错误！',
+                    content: '请输入正确的网址，网址：' + xtr + "无效",
+                    delay: 5000
+                });
+            } else {
+                var n = xtr.search("[内容]");
+                if (n < 0) {
+                    $.toast({
+                        type: 'error',
+                        title: '错误！',
+                        content: '请在网址中添加[内容]，才能正确批量生成地址哦',
+                        delay: 5000
+                    });
+                    return ;
+                }
+                var paramType = $("input:radio[name='paramType']:checked").val();
+                if (paramType == "num") {
+                    var desc = $("#param_num_desc").prop("checked")?1:0;
+                    var start = parseInt($("#param_num_start").val());
+                    var end = parseInt($("#param_num_end").val());
+                    var step = parseInt($("#param_num_inc").val());
+                    step = Math.max(1, step);
+                    end = Math.max(start, end);
+                    if (isPreview) {
+                        var rst = "";
+                        if (desc == 1) {
+                            var tmp = start;
+                            start = end;
+                            end = tmp;
+                        }
+                        let i = start;
+                        do {
+                            rst += xtr.replace("[内容]", i.toString()) + "\n";
+                            if (desc == 1) {
+                                i -= step;
+                                if (i < end) {
+                                    break;
+                                }
+                            } else {
+                                i += step;
+                                if (i > end) {
+                                    break;
+                                }
+                            }
+                        } while (true);
+                        $("#source_preview").val(rst);
+                    } else {
+                        let param = "{param:num," + start + "\t" + end +"\t" + step + "\t" + desc + "}";
+                        return xtr.replace("[内容]", param);
+                    }
+                }
+            }
+        } else {
+            $.toast({
+                type: 'error',
+                title: '错误！',
+                content: '请输入正确的网址',
+                delay: 5000
+            });
+        }
+    }
     function showNotify($msg, $type, $delay, $icon, $from, $align) {
         $type  = $type || 'info';
         $delay = $delay || 1000;
@@ -170,4 +375,49 @@
             }
         });
     }
+    $.toastDefaults = {
+        position: 'top-center', /** top-left/top-right/top-center/bottom-left/bottom-right/bottom-center - Where the toast will show up **/
+        dismissible: true, /** true/false - If you want to show the button to dismiss the toast manually **/
+        stackable: true, /** true/false - If you want the toasts to be stackable **/
+        pauseDelayOnHover: true, /** true/false - If you want to pause the delay of toast when hovering over the toast **/
+        style: {
+            toast: '', /** Classes you want to apply separated my a space to each created toast element (.toast) **/
+            info: '', /** Classes you want to apply separated my a space to modify the "info" type style  **/
+            success: '', /** Classes you want to apply separated my a space to modify the "success" type style  **/
+            warning: '', /** Classes you want to apply separated my a space to modify the "warning" type style  **/
+            error: '', /** Classes you want to apply separated my a space to modify the "error" type style  **/
+        }
+    };
+
+    function cpMatch(toObj,options){if(!options){options={}}
+        var group='(?<content{:num}>[\\s\\S]*?)';if(options.only){sign=sign.replace('{:num}','');if($(toObj).val().indexOf(sign)<0&&$(toObj).val().indexOf('(?<content>')<0){if(options.group){sign=group.replace('{:num}','')}
+            insertAtCaret($(toObj),sign)}else{toastr.error('存在'+sign+'或捕获组')}}else{var reSign=new RegExp(sign.replace('{:num}','(\\d*)').replace('[','\\[').replace(']','\\]'),'g');var reP=new RegExp("\\(\\?<content(\\d*)>",'g');var list=null;var max=0;while((list=reSign.exec($(toObj).val()))!=null){var num=parseInt(list[1]);if(num>max){max=num}}
+            list=null;while((list=reP.exec($(toObj).val()))!=null){var num=parseInt(list[1]);if(num>max){max=num}}
+            if(options.group){sign=group}
+            sign=sign.replace('{:num}',max+1);insertAtCaret($(toObj),sign)}
+    }
+
+    function insertAtCaret(myField,myValue){
+        var curObj=myField[0];
+        if(document.selection){
+            myField.focus();
+            var sel=document.selection.createRange();
+            sel.text=myValue;
+            sel.select()
+        }else if(curObj.selectionStart||curObj.selectionStart=='0'){
+            var startPos=curObj.selectionStart;
+            var endPos=curObj.selectionEnd;
+            var restoreTop=curObj.scrollTop;
+            var value=myField.val();
+            value=value.substring(0,startPos)+myValue+value.substring(endPos,value.length);
+            myField.val(value);
+            myField.focus();
+            curObj.selectionStart=startPos+myValue.length;
+            curObj.selectionEnd=startPos+myValue.length
+        }else{
+            myField.val(myField.val()+myValue);
+            myField.focus()
+        }
+    }
+
 });

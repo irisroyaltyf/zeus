@@ -17,6 +17,9 @@
 body::-webkit-scrollbar {
     width: 0px;
 }
+.form-control {
+    font-size: 16px;
+}
 .cron-input-group {
     font-size: 14px;
     -webkit-border-radius: 2px;

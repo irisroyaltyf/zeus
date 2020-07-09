@@ -1,6 +1,7 @@
 package top.yulegou.zeus.crawler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,8 @@ import top.yulegou.zeus.manager.http.HttpExecutorManager;
 import top.yulegou.zeus.util.PregUtil;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 列表页面抓取
@@ -88,6 +91,48 @@ public class SourceUrlCrawler extends BaseCrawler {
         }
         // 2. 然后获取find所有的 matchi 将最终url里面的[内容i] 替换成 得到的matchi
         return pregAndMatch(areas, urlPattern, rstTemplate);
+    }
+
+    public Set<String> checkAndExpendFromUrls(List<String> urls) {
+        final String regex = "\\{param:(?<type>\\w+)\\,(?<param>[^\\}]*)\\}";
+        Set<String> rst = new TreeSet<>();
+        urls.stream().forEach(url -> {
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(url);
+            if (m.find()) {
+                if (StringUtils.equals(m.group("type"), "num")) {
+                    String param = m.group("param");
+                    String[] params = StringUtils.split(param, "\t");
+                    int start = Integer.parseInt(params[0]);
+                    int end = Integer.parseInt(params[1]);
+                    int step = Integer.parseInt(params[2]);
+                    int desc = Integer.parseInt(params[3]);
+                    end = Math.max(start, end);
+                    step = Math.max(1, step);
+                    if (desc == 1) {
+                        int tmp = start;
+                        start = end;
+                        end = tmp;
+                    }
+                    int i = start;
+                    do {
+                        rst.add(RegExUtils.replacePattern(url, regex, String.valueOf(i)));
+                        if (desc == 1) {
+                            i -= step;
+                            if (i < end) {
+                                break;
+                            }
+                        } else {
+                            i += step;
+                            if (i > end) {
+                                break;
+                            }
+                        }
+                    } while(true);
+                }
+            }
+        });
+        return rst;
     }
 
 }

@@ -17,6 +17,7 @@ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - Light Year Admin https://gitee.com/yinqi/Light-Year-Admin-Using-Iframe-v4
   - jquery
   - underscope.js javascript 工具库
+  - toast https://github.com/Script47/Toast
 #### 开发环境
   - JAVA 8
   - intellij idea
