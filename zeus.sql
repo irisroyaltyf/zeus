@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `zeus_collected`
+--
+
+DROP TABLE IF EXISTS `zeus_collected`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `zeus_collected` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(1024) NOT NULL,
+  `url_md5` varchar(32) NOT NULL,
+  `publish_type` varchar(45) NOT NULL,
+  `task_id` int(11) NOT NULL,
+  `target` varchar(1024) DEFAULT NULL,
+  `des` varchar(1024) DEFAULT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 成功 2 失败',
+  `gmt_create` bigint(20) NOT NULL,
+  `title_md5` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `idx_url_md5` (`url_md5`),
+  KEY `idx_title_md5` (`title_md5`),
+  KEY `idx_gmt` (`gmt_create`),
+  KEY `idx_task` (`task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采集内容';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `zeus_config`
 --
 
@@ -104,4 +130,4 @@ CREATE TABLE `zeus_task` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-07 21:07:58
+-- Dump completed on 2020-07-09 15:44:42
