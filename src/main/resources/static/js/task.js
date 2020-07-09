@@ -119,6 +119,8 @@
         var taskId = $(this).attr("data-id");
         $(this).attr("disabled", true);
         var taskAuto = $(this).attr("data-now");
+        var auto = $(this).parent().find(".task-auto");
+        var autoa = $(this);
         $.ajax({
             url: "/task/auto.do",
             type: "post",
@@ -127,13 +129,13 @@
             success: function (e) {
                 if (e.code == 0) {
                     if (taskAuto == 1) {
-                        $(this).parent().find(".task-auto").html("否");
-                        $(this).html("开启");
-                        $(this).attr("data-now", 0);
+                        auto.html("否");
+                        autoa.html("开启");
+                        autoa.attr("data-now", 0);
                     } else {
-                        $(this).parent().find(".task-auto").html("是");
-                        $(this).html("关闭");
-                        $(this).attr("data-now", 1);
+                        auto.html("是");
+                        autoa.html("关闭");
+                        autoa.attr("data-now", 1);
                     }
                 } else {
                     showMsg(e.msg, 'danger');

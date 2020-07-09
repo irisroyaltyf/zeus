@@ -100,6 +100,8 @@
 <!--        </table>-->
 <!--        <table tableName="zeus_publish_rule" domainObjectName="ZPublishRule"></table>-->
 
-    </context>
-
-</generatorConfiguration>
+            <table tableName="zeus_collected" domainObjectName="ZTaskCollected">
+                <columnOverride column="status" javaType="java.lang.Integer"/>
+            </table>
+        </context>
+    </generatorConfiguration>

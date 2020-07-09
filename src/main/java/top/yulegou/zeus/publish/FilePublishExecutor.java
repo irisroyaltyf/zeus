@@ -51,6 +51,11 @@ public class FilePublishExecutor implements BasePublishExecutor {
     }
 
     @Override
+    public String getStringPublishType() {
+        return "FILE";
+    }
+
+    @Override
     public int publish(List<ContentCollectedDTO> fieldList, ZTask task, ZPublishRule publishRule) {
         ZBasePublishRuleConfig ruleConfig = publishRule.getRuleConfig();
         if (ruleConfig == null || !(ruleConfig instanceof FilePublishRuleConfig)) {
@@ -129,7 +134,7 @@ public class FilePublishExecutor implements BasePublishExecutor {
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 log.error("创建文件夹错误,请确认目录权限和磁盘空间");
-                return PublishResult.failed();
+                return PublishResult.failed("创建文件夹错误,请确认目录权限和磁盘空间");
             }
         }
         File f = new File(fileLocation + "/" + sdf.format(new Date()) + ".txt");
@@ -152,6 +157,7 @@ public class FilePublishExecutor implements BasePublishExecutor {
             return PublishResult.successWithMsg(f.getAbsolutePath());
         } catch (Exception e) {
             log.error("write file error ", e);
+            return PublishResult.failed(e.getMessage());
         } finally {
             if (fileWriter != null) {
                 try {
@@ -161,6 +167,5 @@ public class FilePublishExecutor implements BasePublishExecutor {
                 }
             }
         }
-        return PublishResult.failed();
     }
 }

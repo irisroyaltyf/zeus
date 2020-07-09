@@ -25,4 +25,7 @@ public class Constants {
     public static final int OPERATE_JOB_START = 1;
     public static final int OPERATE_JOB_STOP = 2;
     public static final int OPERATE_JOB_O = 3;
+
+    public static final int PUBLISH_SUCCESS = 1;
+    public static final int PUBLISH_FAILED = 2;
 }

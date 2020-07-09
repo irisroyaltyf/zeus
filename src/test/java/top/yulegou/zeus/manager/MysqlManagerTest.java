@@ -12,6 +12,7 @@ package top.yulegou.zeus.manager;/*
  * limitations under the License.
  */
 
+import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,7 +63,7 @@ public class MysqlManagerTest {
         params.put("name", "test1");
         params.put("empid", "100");
         try {
-            long rst = mysqlManager.insertRow(connectionConfig, "honor", params);
+            JSONObject rst = mysqlManager.insertRow(connectionConfig, "honer", params);
             System.out.println("rst: " + rst);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

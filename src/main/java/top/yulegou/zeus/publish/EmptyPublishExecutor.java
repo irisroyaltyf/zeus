@@ -38,12 +38,17 @@ public class EmptyPublishExecutor implements BasePublishExecutor {
     }
 
     @Override
+    public String getStringPublishType() {
+        return "NULL";
+    }
+
+    @Override
     public int publish(List<ContentCollectedDTO> fieldList, ZTask zTask, ZPublishRule publishRule) {
         return 0;
     }
 
     @Override
     public PublishResult publish(ContentCollectedDTO content, ZTask zTask, ZPublishRule publishRule) {
-        return PublishResult.failed();
+        return PublishResult.failed("未发布任何内容");
     }
 }

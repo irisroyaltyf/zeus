@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import reactor.core.publisher.Flux;
 import top.yulegou.zeus.constant.Constants;
 import top.yulegou.zeus.crawler.ContentCrawler;
@@ -42,6 +43,8 @@ public class ZeusTaskManager {
     private ZeusPublishRuleManager publishRuleManager;
     @Autowired
     private QuartzManager quartzManager;
+    @Autowired
+    ZeusTaskCollectedManager zeusTaskCollectedManager;
 
 
     public Flux<String> collectForController(final Integer taskId) throws Exception {
@@ -180,12 +183,23 @@ public class ZeusTaskManager {
             ZBasePublishRuleConfig publishRuleConfig = publishRule.getRuleConfig();
             BasePublishExecutor executor = PublishCreator.create(publishRuleConfig);
             PublishResult publishResult = executor.publish(contentCollectedDTO, task, publishRule);
+            ZTaskCollected collected = new ZTaskCollected();
+            collected.setTaskId(task.getId());
+            collected.setPublishType(executor.getStringPublishType());
+            collected.setUrl(contentCollectedDTO.getUrl());
+            collected.setUrlMd5(DigestUtils.md5DigestAsHex(contentCollectedDTO.getUrl().getBytes()));
+            collected.setGmtCreate(new Date().getTime());
             if(publishResult.isSuccess()) {
-                // 记录数据库 成功
+                collected.setStatus(Constants.PUBLISH_SUCCESS);
+                collected.setTarget(publishResult.getRstMsg().getString("msg"));
+                //发布成功记录数据库
                 log.info("成功 发布" + contentCollectedDTO.getUrl());
             } else {
+                collected.setStatus(Constants.PUBLISH_FAILED);
+                collected.setTarget(publishResult.getRstMsg().getString("msg"));
                 log.info("失败 " + contentCollectedDTO.getUrl());
             }
+            zeusTaskCollectedManager.insert(collected);
         });
     }
     public void collect(Integer taskId) {

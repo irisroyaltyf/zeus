@@ -12,6 +12,8 @@ package top.yulegou.zeus.manager.db;/*
  * limitations under the License.
  */
 
+import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,7 @@ import java.util.Map;
  * @date 2020/6/28
  **/
 @Component
+@Slf4j
 public class MysqlManager {
 
     public List<DbColumnsDTO> getColumnNames(DbConnectionConfig dbConfig, String tableName) throws SQLException, Exception{
@@ -147,14 +150,15 @@ public class MysqlManager {
             }
         }
     }
-    public long insertRow(DbConnectionConfig connectionConfig, String tableName, Map<String, String> field) throws SQLException {
-        return insertRow(connectionConfig, tableName, field, false);
-    }
+//    public JSONObject insertRow(DbConnectionConfig connectionConfig, String tableName, Map<String, String> field) throws SQLException {
+//        return insertRow(connectionConfig, tableName, field, false);
+//    }
 
-    public long insertRow(DbConnectionConfig connectionConfig, String tableName, Map<String, String> field, boolean hasGenerateKey) throws SQLException {
+    public JSONObject insertRow(DbConnectionConfig connectionConfig, String tableName, Map<String, String> field) throws SQLException {
         if (field == null || field.isEmpty()) {
-            return 0;
+            return null;
         }
+        JSONObject rst = new JSONObject();
         Connection c = buildConnection(connectionConfig);
         try {
             StringBuilder sb = new StringBuilder();
@@ -165,21 +169,23 @@ public class MysqlManager {
                     .append("')");
 
             String sql = sb.toString();
-            System.out.println(sql);
-            PreparedStatement stmt = c.prepareStatement(sql);
-            if (hasGenerateKey) {
-                stmt.executeUpdate();
+            log.info(sql);
+            PreparedStatement stmt = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                int x = stmt.executeUpdate();
+                rst.put("result", x);
                 ResultSet rs = stmt.getGeneratedKeys();
-                rs.next();
-                return rs.getLong(1);
-            } else {
-                return stmt.executeUpdate();
-            }
+                if (rs.next()) {
+                    rs.getMetaData().getCatalogName(1);
+                    long generated = rs.getLong(1);
+                    rst.put("generateKey", "generateKey");
+                    rst.put("generateValue", String.valueOf(rs.getLong(1)));
+                }
         } finally {
             if (!c.isClosed()) {
                 c.close();
             }
         }
+        return rst;
     }
 
     public Connection buildConnection(DbConnectionConfig connectionConfig) throws SQLException {

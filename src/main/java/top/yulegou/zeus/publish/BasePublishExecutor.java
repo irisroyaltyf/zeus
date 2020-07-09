@@ -27,6 +27,7 @@ import java.util.List;
  **/
 public interface BasePublishExecutor {
     int getPublishType();
+    String getStringPublishType();
     int publish(List<ContentCollectedDTO> fieldList, ZTask zTask, ZPublishRule publishRule);
     PublishResult publish(ContentCollectedDTO content, ZTask zTask, ZPublishRule publishRule);
 }

@@ -45,6 +45,11 @@ public class DbPublishExecutor implements BasePublishExecutor {
     }
 
     @Override
+    public String getStringPublishType() {
+        return "DB";
+    }
+
+    @Override
     public int publish(List<ContentCollectedDTO> fieldList, ZTask zTask, ZPublishRule publishRule) {
         return 0;
     }

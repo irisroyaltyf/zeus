@@ -12,6 +12,7 @@ package top.yulegou.zeus.publish.db;/*
  * limitations under the License.
  */
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,8 @@ public class MysqlPublishExecutor {
                 || tableConfig.getTableFields().isEmpty()) {
             return PublishResult.success();
         }
+        StringBuilder sb = new StringBuilder();
+        boolean err = false;
         for (DbColumnBindConfig tableField : tableConfig.getTableFields()) {
             tableField.getTableName();
             if (tableField.getFieldBind() == null
@@ -78,13 +81,29 @@ public class MysqlPublishExecutor {
                }
             });
             try {
-                mysqlManager.insertRow(connectionConfig, tableField.getTableName(), insertKeyValue);
+                JSONObject obj = mysqlManager.insertRow(connectionConfig, tableField.getTableName(), insertKeyValue);
+                if (sb.length() > 0) {
+                    sb.append("\n");
+                }
+                if (obj != null && obj.getInteger("result") > 0) {
+                    sb.append("mysql:").append(connectionConfig.getSchema())
+                            .append("@table:").append(tableField.getTableName());
+                    if (obj.containsKey("generateValue")) {
+                        sb.append("@generatedKey:").append(obj.getString("generateValue"));
+                    }
+                } else {
+                    err = true;
+                    sb.append("mysql:@table").append(tableField.getTableName()).append("数据库插入失败");
+                }
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
-                PublishResult.failed(throwables.getMessage());
+                log.error("mysql publish error " + JSONObject.toJSONString(tableField), throwables);
+                err = true;
+                sb.append(throwables.getMessage());
             }
-
         };
-        return PublishResult.success();
+        if (err) {
+            return PublishResult.failed(sb.toString());
+        }
+        return PublishResult.successWithMsg(sb.toString());
     }
 }
