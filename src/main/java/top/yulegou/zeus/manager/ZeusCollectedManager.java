@@ -69,4 +69,11 @@ public class ZeusCollectedManager {
         criteria.andIdIn(selectedIds);
         return zTaskCollectedMapper.deleteByExample(example);
     }
+
+    public List<ZTaskCollected> findByUrlMd5(String md5DigestAsHex) {
+        ZTaskCollectedExample example = new ZTaskCollectedExample();
+        ZTaskCollectedExample.Criteria criteria = example.createCriteria();
+        criteria.andUrlMd5EqualTo(md5DigestAsHex);
+        return zTaskCollectedMapper.selectByExample(example);
+    }
 }

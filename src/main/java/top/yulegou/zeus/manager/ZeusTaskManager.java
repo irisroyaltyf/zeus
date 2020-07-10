@@ -172,7 +172,18 @@ public class ZeusTaskManager {
             }
         });
         // 2. collect content
-        List<ContentCollectedDTO> collectedDTOS = contentUrls.stream().map((contentUrl -> {
+        List<ContentCollectedDTO> collectedDTOS = contentUrls.stream().filter(contentUrl -> {
+            if (StringUtils.isEmpty(contentUrl)) {
+                return false;
+            }
+            List<ZTaskCollected> collecteds =
+                    zeusCollectedManager.findByUrlMd5(DigestUtils.md5DigestAsHex(contentUrl.getBytes()));
+            if (collecteds == null || collecteds.isEmpty()) {
+                return false;
+            } else {
+                return true;
+            }
+        }).map((contentUrl -> {
             //TODO 可能需要延迟
             ContentCollectedDTO contentCollectedDTO =
                     contentCrawler.collectField(contentUrl, task, ruleConfig.getZCrawlerContentConfig());

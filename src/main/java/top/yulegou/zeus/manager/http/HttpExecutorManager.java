@@ -46,8 +46,9 @@ public class HttpExecutorManager {
                 .url(url)
                 .get()
                 .build();
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             if (response.code() > 400) {
                 log.error("url get html error occur " + url, response.code());
             } else {
@@ -57,6 +58,10 @@ public class HttpExecutorManager {
             log.error("getHtml error " + url, e);
         } catch (Exception e) {
             log.error("getHtml error " + url, e);
+        } finally {
+            if (response != null) {
+                response.close();
+            }
         }
         return "";
     }
@@ -85,8 +90,9 @@ public class HttpExecutorManager {
                 .url(url)
                 .post(builder.build())
                 .build();
+        Response response = null;
         try {
-            Response response = client.newCall(request).execute();
+            response = client.newCall(request).execute();
             if (response.code() > 400) {
                 log.error("url get html error occur " + url, response.code());
             } else {
@@ -96,6 +102,10 @@ public class HttpExecutorManager {
             log.error("postHtml " + url, e);
         } catch (Exception e) {
             log.error("postHtml " + url, e);
+        } finally {
+            if (response != null) {
+                response.close();
+            }
         }
         return "";
     }

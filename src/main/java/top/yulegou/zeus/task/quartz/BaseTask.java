@@ -20,7 +20,7 @@ public class BaseTask  implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         ZTask scheduleJob = (ZTask) jobExecutionContext.getMergedJobDataMap().get("scheduleJob");
 
-        System.out.println("do " + scheduleJob.gettName() + " " + scheduleJob.getCron());
+        logger.info("do " + scheduleJob.gettName() + " " + scheduleJob.getCron());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         logger.error("docollect task is null " + sdf.format(new Date()));
         ZeusTaskManager zeusTaskManager = ZeusBeanUtil.getBean(ZeusTaskManager.class);
