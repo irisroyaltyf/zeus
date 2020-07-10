@@ -159,7 +159,6 @@
             var sourceUrls = $("#source_urls").val() + "\n";
             sourceUrls = sourceUrls.replace("\r\n", "\n");
             var matchUrls = sourceUrls.match(/\w+\:\/\/[^\n]+/i);
-            console.log(matchUrls);
             if (!matchUrls) {
                 $.toast({
                     type: 'error',
@@ -394,6 +393,36 @@
                         let param = "{param:letter," + String.fromCharCode(s) + "\t" + String.fromCharCode(e) + "\t" + desc + "}";
                         return xtr.replace("[内容]", param);
                     }
+                } else if(paramType == "custom") {
+                    var customParam = $("#param_custom").val();
+                    customParam = customParam.replace("\r\n", "\n");
+                    if (customParam) {
+                        var params = customParam.trim().split("\n");
+                        var p = [];
+                        params.forEach(m => {
+                           if (m && m != "" && m.trim() != "") {
+                               if (isPreview) {
+                                   rst += xtr.replace("[内容]", m) + "\n";
+                               }
+                               p.push(m);
+                           }
+                        });
+                        if (p.length > 0) {
+                            if (isPreview) {
+                                $("#source_preview").val(rst);
+                                return ;
+                            } else {
+                                let param = "{param:letter," + p.join("\t") + "}";
+                                return xtr.replace("[内容]", param);
+                            }
+                        }
+                    }
+                    $.toast({
+                        type: 'error',
+                        title: '错误！',
+                        content: '请输入正确的自定义内容',
+                        delay: 5000
+                    });
                 }
             }
         } else {

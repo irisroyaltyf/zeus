@@ -217,8 +217,8 @@
                                                         <div class="input-group mb-3" source-param="num">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text">
-                                                                    <input type="radio" name="paramType" value="num" checked="checked">
-                                                                数字
+                                                                    <input type="radio" name="paramType" id="radio_num" value="num" checked="checked">
+                                                                    <label for="radio_num" style="margin-bottom: 0; cursor: pointer">数字</label>
                                                                 </span>
                                                             </div>
                                                             <div class="form-control url-line">
@@ -231,8 +231,9 @@
                                                         <div class="input-group mb-3" source-param="letter">
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text">
-                                                                    <input type="radio" name="paramType" value="letter" >
-                                                                字母
+                                                                    <input type="radio" id="radio_letter" name="paramType" value="letter" >
+                                                                    <label for="radio_letter" style="margin-bottom: 0; cursor: pointer">字母</label>
+
                                                                 </span>
                                                             </div>
                                                             <div class="form-control url-line">
@@ -240,6 +241,15 @@
                                                                 到 <input id="param_letter_end"  value="Z" class="url-input">
                                                                 <label><input type="checkbox" id="param_letter_desc"> 倒序</label>
                                                             </div>
+                                                        </div>
+                                                        <div class="input-group mb-3" source-param="custom">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <input type="radio" id="radio_custom" name="paramType" value="custom" >
+                                                                    <label for="radio_custom" style="margin-bottom: 0; cursor: pointer">自定义</label>
+                                                                </span>
+                                                            </div>
+                                                            <textarea rows="3" class="form-control" id="param_custom" placeholder="一行一个"></textarea>
                                                         </div>
                                                         <button type="button" class="btn btn-block btn-secondary" id="preview" style="margin-bottom: 10px">预览</button>
                                                         <textarea class="form-control disabled" rows="5" id="source_preview" readonly="readonly"></textarea>

@@ -167,6 +167,15 @@ public class SourceUrlCrawler extends BaseCrawler {
                             }
                         }
                     } while (true);
+                } else if (StringUtils.equals(m.group("type"), "custom")) {
+                    String param = m.group("param");
+                    String[] params = StringUtils.split("\t");
+                    int l = params.length;
+                    for(int i = 0; i< l; i ++) {
+                        if (StringUtils.isNotEmpty(params[i])) {
+                            rst.add(RegExUtils.replacePattern(url, regex, params[i]));
+                        }
+                    }
                 }
             }
         });

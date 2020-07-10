@@ -162,15 +162,14 @@ public class ZeusTaskManager {
         }
         // 1. content url
         final List<String> contentUrls = new ArrayList<>();
-        urls.stream().forEach(url -> {
-            if (ruleConfig.getSourceIsContent() == null || ruleConfig.getSourceIsContent() == false) {
+        if (ruleConfig.getSourceIsContent() == null || ruleConfig.getSourceIsContent() == false) {
+            urls.stream().forEach(url -> {
                 // crawler page url
-                // TODO  对采集到的网址进行判断 是否有效
                 contentUrls.addAll(sourceUrlCrawler.getUrls(url, task.getzTaskConfig(), ruleConfig.getZCrawlerUrlConfig()));
-            } else {
-                contentUrls.add(url);
-            }
-        });
+            });
+        } else {
+            contentUrls.addAll(urls);
+        }
         // 2. collect content
         List<ContentCollectedDTO> collectedDTOS = contentUrls.stream().filter(contentUrl -> {
             if (StringUtils.isEmpty(contentUrl)) {

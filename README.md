@@ -1,5 +1,6 @@
 #### 简介
-zeus采集器是一款免费的数据采集发布爬虫软件,采用java,springboot+mysql开发,可部署在云服务器上,几乎能采集所有类型的网页
+zeus采集器是一款免费的数据采集发布爬虫软件,采用java,springboot+mysql开发,可部署在云服务器上,几乎能采集所有类型的网页.
+zeus还在持续开发阶段，欢迎提出建议和直到意见.
 
 #### 可选依赖
 https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -24,6 +25,10 @@ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - 包管理gradle
   - 版本控制 git
   - 数据库 mysql5.7
+
+#### 交流与反馈
+  - 欢迎您通过Github Issues来提交问题、报告与建议
+  - QQ群: 1136513259 (Zeus)
 
 #### 功能列表
    [TODOLIST](./todo.md "TODOLIST")
