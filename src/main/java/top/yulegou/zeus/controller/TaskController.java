@@ -193,7 +193,9 @@ public class TaskController extends BaseController {
         if (ruleConfig == null) {
             ruleConfig = new ZCrawlerRuleConfig();
         }
-        ruleConfig.setFromUrls(beginUrlDTO.getFromUrls());
+        if (beginUrlDTO.getFromUrls() != null) {
+            ruleConfig.setFromUrls(beginUrlDTO.getFromUrls().stream().filter(url -> StringUtils.isNotEmpty(url)).collect(Collectors.toList()));
+        }
         ruleConfig.setSourceIsContent(beginUrlDTO.getSourceIsContent());
         crawlerRule.setzCrawlerRuleConfig(ruleConfig);
         int rst = zeusCrawlerRuleManager.addOrUpdateZrawlerRule(crawlerRule);

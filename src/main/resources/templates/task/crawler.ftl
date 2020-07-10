@@ -137,6 +137,8 @@
                                                    data-toggle="modal" data-target="#beginUrlModal"><img src="/imgs/plus.svg" width="18px" height="18px"></a>
                                             </label>
                                             <div id="from-urls">
+                                                <input type="hidden" name="fromUrls" class="form-control" value=""/>
+
                                                 <#if crawlerRuleConfig?? && crawlerRuleConfig.fromUrls??>
                                                     <#list crawlerRuleConfig.fromUrls as url>
                                                         <div class="input-group mb-3">
@@ -221,9 +223,22 @@
                                                             </div>
                                                             <div class="form-control url-line">
                                                                 从 <input id="param_num_start" type="number" value="1" class="url-input" >
-                                                                到 <input id="param_num_end" type="number" value="5" class="url-input">
+                                                                到 <input id="param_num_end" type="number" value="10" class="url-input">
                                                                 递增数 <input id="param_num_inc" type="number" value="1" class="url-input">
                                                                 <label><input type="checkbox" id="param_num_desc"> 倒序</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group mb-3" source-param="letter">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">
+                                                                    <input type="radio" name="paramType" value="letter" >
+                                                                字母
+                                                                </span>
+                                                            </div>
+                                                            <div class="form-control url-line">
+                                                                从 <input id="param_letter_start"  value="A" class="url-input" >
+                                                                到 <input id="param_letter_end"  value="Z" class="url-input">
+                                                                <label><input type="checkbox" id="param_letter_desc"> 倒序</label>
                                                             </div>
                                                         </div>
                                                         <button type="button" class="btn btn-block btn-secondary" id="preview" style="margin-bottom: 10px">预览</button>

@@ -213,14 +213,16 @@
                 if (modifyInputId) {
                     $("#" + modifyInputId).val(url);
                 } else {
-                    $("#from-urls").append(nodePre + url + nodeMi + Math.uuid() + nodeEnd);
+                    if ($("input[name='fromUrls'][value='" + url +"']").length == 0) {
+                        $("#from-urls").append(nodePre + url + nodeMi + Math.uuid() + nodeEnd);
+                    } else {
+                        showMsg("重复地址", 'info');
+                    }
                 }
             } else {
                 return;
             }
         }
-        $("#modifyId").val("");
-        $("#begin-url-modal-content").clearForm();
         $("#beginUrlModal").modal("hide");
     });
 
@@ -230,6 +232,7 @@
 
         $("#modifyId").val(modifyInput.attr("id"));
         if (url) {
+            $("#begin-url-modal-content").clearForm();
             var match = url.match(/\{param\:(\w+)\,([^\}]*)\}/i);
             if (match) {
                 $("#paramUrl").val(url.replace(/\{param\:(\w+)\,([^\}]*)\}/i, "[内容]"));
@@ -244,6 +247,16 @@
                         $("#param_num_desc").attr("checked", false)
                     }
                     $("input:radio[name='paramType'][value='num']").prop("checked", true);
+                } else if(match[1] = 'letter') {
+                    var paramVal = match[2].split("\t");
+                    $("#param_letter_start").val(paramVal[0]);
+                    $("#param_letter_end").val(paramVal[1]);
+                    if (paramVal[3] == 1) {
+                        $("#param_num_desc").attr("checked", "checked")
+                    } else {
+                        $("#param_num_desc").attr("checked", false)
+                    }
+                    $("input:radio[name='paramType'][value='letter']").prop("checked", true);
                 }
                 $('#begin-url-tab a[href="#templ-fill"]').tab('show');
             } else {
@@ -253,6 +266,9 @@
         }
 
         $("#beginUrlModal").modal("show");
+    })
+    $('#beginUrlModal').on('hidden.bs.modal', function (e) {
+        $("#modifyId").val("");
     })
     $("#preview").on("click", function () {
         paramUrlDo(true);
@@ -298,6 +314,7 @@
                     });
                     return ;
                 }
+                var rst = "";
                 var paramType = $("input:radio[name='paramType']:checked").val();
                 if (paramType == "num") {
                     var desc = $("#param_num_desc").prop("checked")?1:0;
@@ -305,9 +322,11 @@
                     var end = parseInt($("#param_num_end").val());
                     var step = parseInt($("#param_num_inc").val());
                     step = Math.max(1, step);
+                    if (!end) {
+                        end=start;
+                    }
                     end = Math.max(start, end);
                     if (isPreview) {
-                        var rst = "";
                         if (desc == 1) {
                             var tmp = start;
                             start = end;
@@ -331,6 +350,48 @@
                         $("#source_preview").val(rst);
                     } else {
                         let param = "{param:num," + start + "\t" + end +"\t" + step + "\t" + desc + "}";
+                        return xtr.replace("[内容]", param);
+                    }
+                } else if (paramType == "letter") {
+                    var desc = $("#param_letter_desc").prop("checked")?1:0;
+                    var start = $("#param_letter_start").val();
+                    var end = $("#param_letter_end").val();
+                    var i = 0, s = 0, e = 0;
+                    if (start && start.length > 0) {
+                        s = start.charCodeAt(0);
+                    }
+                    if (end && end.length > 0) {
+                        e = end.charCodeAt(0);
+                    }
+                    if (isPreview) {
+                        if (desc == 1) {
+                            var tmp = s;
+                            s = e;
+                            e = tmp;
+                        }
+                        i = s;
+                        do {
+                            if (i == 0) {
+                                rst += xtr.replace("[内容]", "") + "\n";
+                                break;
+                            } else {
+                                rst += xtr.replace("[内容]", String.fromCharCode(i)) + "\n";
+                            }
+                            if (desc == 1) {
+                                i --;
+                                if (i < e) {
+                                    break;
+                                }
+                            } else {
+                                i ++;
+                                if (i > e) {
+                                    break;
+                                }
+                            }
+                        } while (true);
+                        $("#source_preview").val(rst);
+                    } else {
+                        let param = "{param:letter," + String.fromCharCode(s) + "\t" + String.fromCharCode(e) + "\t" + desc + "}";
                         return xtr.replace("[内容]", param);
                     }
                 }
@@ -418,6 +479,16 @@
             myField.val(myField.val()+myValue);
             myField.focus()
         }
+    }
+
+    function showMsg(msg, type) {
+        $.notify({
+            // options
+            message: msg
+        },{
+            // settings
+            type: type
+        });
     }
 
 });

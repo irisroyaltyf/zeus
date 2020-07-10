@@ -95,14 +95,14 @@ public class SourceUrlCrawler extends BaseCrawler {
 
     public Set<String> checkAndExpendFromUrls(List<String> urls) {
         final String regex = "\\{param:(?<type>\\w+)\\,(?<param>[^\\}]*)\\}";
-        Set<String> rst = new TreeSet<>();
+        Set<String> rst = new LinkedHashSet<>();
         urls.stream().forEach(url -> {
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(url);
             if (m.find()) {
                 if (StringUtils.equals(m.group("type"), "num")) {
                     String param = m.group("param");
-                    String[] params = StringUtils.split(param, "\t");
+                    String[] params = StringUtils.split(param, "\t", 4);
                     int start = Integer.parseInt(params[0]);
                     int end = Integer.parseInt(params[1]);
                     int step = Integer.parseInt(params[2]);
@@ -129,6 +129,44 @@ public class SourceUrlCrawler extends BaseCrawler {
                             }
                         }
                     } while(true);
+                } else if (StringUtils.equals(m.group("type"), "letter")) {
+                    String param = m.group("param");
+                    String[] params = param.split("\t", 3);
+                    String start = (params[0]);
+                    String end = (params[1]);
+                    int desc = Integer.parseInt(params[2]);
+                    char i = 0, s = 0, e = 0;
+                    if (StringUtils.isNotEmpty(start)) {
+                        s = start.charAt(0);
+                    }
+                    if (StringUtils.isNotEmpty(end)) {
+                        e = end.charAt(0);
+                    }
+                    if (desc == 1) {
+                        char tmp = s;
+                        s = e;
+                        e = tmp;
+                    }
+                    i = s;
+                    do{
+                        if (i == 0) {
+                            rst.add(RegExUtils.replacePattern(url, regex, ""));
+                            break;
+                        } else {
+                            rst.add(RegExUtils.replacePattern(url, regex, String.valueOf(i)));
+                        }
+                        if (desc == 1) {
+                            i --;
+                            if (i < e) {
+                                break;
+                            }
+                        } else {
+                            i ++;
+                            if (i > e) {
+                                break;
+                            }
+                        }
+                    } while (true);
                 }
             }
         });

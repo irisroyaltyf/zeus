@@ -37,4 +37,13 @@ public class SourUrlCrawlerTest {
         Set<String> rst = sourceUrlCrawler.checkAndExpendFromUrls(urls);
         System.out.println(rst);
     }
+    @Test
+    public void checkAndExpendFromUrlsLetterTest() {
+        List<String> urls = new ArrayList<>();
+        urls.add("https://www.techsir.com/reviews/index_{param:letter,A\tZ\t1}.html");
+        Set<String> rst = sourceUrlCrawler.checkAndExpendFromUrls(urls);
+        List<String> rL = new ArrayList<>();
+        rL.addAll(rst);
+        System.out.println(rL);
+    }
 }
