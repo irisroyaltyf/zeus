@@ -17,6 +17,8 @@
     <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.min.css">
     <link rel="stylesheet" type="text/css" href="/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-confirm.min.css">
 </head>
 
 <body>
@@ -37,50 +39,51 @@
                         <div class="card">
                             <header class="card-header"><div class="card-title">任务列表</div></header>
                             <div class="card-body">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>任务名称</th>
-                                        <th>采集时间</th>
-                                        <th>下次采集时间</th>
-                                        <th>自动采集</th>
-                                        <th>添加时间</th>
-                                        <th>任务分组</th>
-                                        <th>操作</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <#list tasks as taski>
-                                    <tr>
-                                        <td scope="row">${taski_index}</td>
-                                        <td><a href="/task/edit?task_id=${taski.id}"> ${taski.gettName()}</a></td>
-                                        <td><#if taski.lastCaiji==0>无<#else >${taski.lastCaiji?number_to_datetime}</#if>
-                                            <a href="javascript:;" class="collect" data="${taski.id}">采集</a>
-                                        </td>
-                                        <td><#if taski.nextTime==0>无<#else>${taski.nextTime?number_to_datetime}</#if></td>
-                                        <td>
-                                            <#if taski.tAuto?? && taski.tAuto == 1>
-                                                <span class="task-auto">是</span>
-                                                &nbsp;&nbsp;&nbsp;<a class="auto_collect" href="javascript:;" data-id="${taski.id}" data-now="1">关闭</a>
-                                            <#else >
-                                                <span class="task-auto">否</span>
-                                                &nbsp;&nbsp;&nbsp;<a class="auto_collect" href="javascript:;" data-id="${taski.id}" data-now="0">开启</a>
-                                            </#if>
-                                        </td>
-                                        <td>${taski.gmtCreate?number_to_datetime}</td>
-                                        <td>${taski.groupId!''}</td>
-                                        <td>
-                                            <a href="/task/crawler?task_id=${taski.id}">采集规则</a>
-                                            <span class="sep">|</span>
-                                            <a href="/task/publish?task_id=${taski.id}">发布</a>
-                                            <span class="sep">|</span>
-                                            <a href="javascript:;" class="delete" item-id="${taski.id}">删除</a>
-                                        </td>
-                                    </tr>
-                                    </#list>
-                                    </tbody>
-                                </table>
+                                <table id="tb_task"></table>
+<#--                                <table class="table table-bordered table-striped">-->
+<#--                                    <thead>-->
+<#--                                    <tr>-->
+<#--                                        <th>#</th>-->
+<#--                                        <th>任务名称</th>-->
+<#--                                        <th>采集时间</th>-->
+<#--                                        <th>下次采集时间</th>-->
+<#--                                        <th>自动采集</th>-->
+<#--                                        <th>添加时间</th>-->
+<#--                                        <th>任务分组</th>-->
+<#--                                        <th>操作</th>-->
+<#--                                    </tr>-->
+<#--                                    </thead>-->
+<#--                                    <tbody>-->
+<#--                                    <#list tasks as taski>-->
+<#--                                    <tr>-->
+<#--                                        <td scope="row">${taski_index}</td>-->
+<#--                                        <td><a href="/task/edit?task_id=${taski.id}"> ${taski.gettName()}</a></td>-->
+<#--                                        <td><#if taski.lastCaiji==0>无<#else >${taski.lastCaiji?number_to_datetime}</#if>-->
+<#--                                            <a href="javascript:;" class="collect" data="${taski.id}">采集</a>-->
+<#--                                        </td>-->
+<#--                                        <td><#if taski.nextTime==0>无<#else>${taski.nextTime?number_to_datetime}</#if></td>-->
+<#--                                        <td>-->
+<#--                                            <#if taski.tAuto?? && taski.tAuto == 1>-->
+<#--                                                <span class="task-auto">是</span>-->
+<#--                                                &nbsp;&nbsp;&nbsp;<a class="auto_collect" href="javascript:;" data-id="${taski.id}" data-now="1">关闭</a>-->
+<#--                                            <#else >-->
+<#--                                                <span class="task-auto">否</span>-->
+<#--                                                &nbsp;&nbsp;&nbsp;<a class="auto_collect" href="javascript:;" data-id="${taski.id}" data-now="0">开启</a>-->
+<#--                                            </#if>-->
+<#--                                        </td>-->
+<#--                                        <td>${taski.gmtCreate?number_to_datetime}</td>-->
+<#--                                        <td>${taski.groupId!''}</td>-->
+<#--                                        <td>-->
+<#--                                            <a href="/task/crawler?task_id=${taski.id}">采集规则</a>-->
+<#--                                            <span class="sep">|</span>-->
+<#--                                            <a href="/task/publish?task_id=${taski.id}">发布</a>-->
+<#--                                            <span class="sep">|</span>-->
+<#--                                            <a href="javascript:;" class="delete" item-id="${taski.id}">删除</a>-->
+<#--                                        </td>-->
+<#--                                    </tr>-->
+<#--                                    </#list>-->
+<#--                                    </tbody>-->
+<#--                                </table>-->
                             </div>
                         </div>
                     </div>
@@ -123,10 +126,14 @@
         nav.parents('.nav-item-has-subnav').addClass('open').first().addClass('active');
     });
 </script>
+<script type="text/javascript" src="/js/lib/popper.min.js"></script>
 <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/lib/bootstrap-notify.min.js"></script>
 <script type="text/javascript" src="/js/lib/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="/js/lib/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/js/lib/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="/js/lib/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="/js/lib/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="/js/index.min.js"></script>
 <script type="text/javascript" src="/js/task.js"></script>
 </body>

@@ -64,6 +64,30 @@ public class TaskController extends BaseController {
         model.addAttribute("task", task);
         return "task/edit";
     }
+    @RequestMapping("/list.data")
+    @ResponseBody
+    public String getTaskList(
+            @RequestParam(value = "page", defaultValue = "1") Integer start,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sortOrder", defaultValue = "asc") String sortOrder
+    ) {
+        JSONObject object = new JSONObject();
+        int off = (start - 1) * size;
+        off = Math.max(0, off);
+        ZTaskExample example = new ZTaskExample();
+        example.setLimit(size);
+        example.setOffset(off);
+        example.setOrderByClause(" id " + sortOrder);
+        List<ZTask> tasks = zeusTaskManager.selectTask(example);
+        tasks.stream().forEach(task -> {
+            if (task.gettAuto() != null &&  task.gettAuto() == 1) {
+                task.setNextTime(QuartzManager.getNextTriggerTime(task.getCron()));
+            }
+        });
+        object.put("rows", tasks);
+        object.put("total", zeusTaskManager.countTasks());
+        return object.toJSONString();
+    }
 
     @RequestMapping("/auto.do")
     @ResponseBody

@@ -242,6 +242,9 @@ public class ZeusTaskManager {
 //        ZTaskExample.Criteria criteria = example.createCriteria();
         return zTaskMapper.selectByExampleWithBLOBs(example);
     }
+    public List<ZTask> selectTask(ZTaskExample example) {
+        return zTaskMapper.selectByExampleWithBLOBs(example);
+    }
 
     public long countTask(String taskName, int groupId) {
         ZTaskExample example = new ZTaskExample();
@@ -287,5 +290,10 @@ public class ZeusTaskManager {
                 operateTask(task);
             }
         });
+    }
+
+    public long countTasks() {
+        ZTaskExample example = new ZTaskExample();
+        return zTaskMapper.countByExample(example);
     }
 }
