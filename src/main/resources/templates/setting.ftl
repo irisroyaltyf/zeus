@@ -36,14 +36,13 @@
 
                     <div class="col-lg-12">
                         <div class="card">
-                            <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
-                                <li class="nav-item"> <a href="#" class="nav-link active">基本</a> </li>
-                                <li class="nav-item"> <a href="" class="nav-link">系统</a> </li>
-                                <li class="nav-item"> <a href="" class="nav-link">上传</a> </li>
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"> <a href="#base-setting" data-toggle="tab" class="nav-link active">基本</a> </li>
+                                <li class="nav-item"> <a href="#image-setting" data-toggle="tab" class="nav-link">图片设置</a> </li>
+                                <li class="nav-item"> <a href="#up-setting" data-toggle="tab" class="nav-link">上传</a> </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active">
-
+                                <div class="tab-pane active show" id="base-setting" role="tabpanel">
                                     <form action="/config.do" method="post" name="edit-form" class="edit-form" id="config-form">
                                         <div class="form-group">
                                             <label for="web_site_title">遵守robots协议</label>
@@ -60,7 +59,7 @@
                                                 </div>
                                             </div>
                                             <small class="help-block">严格按照目标网站的robots.txt设置爬取数据，避免采集到隐私、侵权等具有争议性的内容
-                                                <a href="https://www.baidu.com/s?wd=robots%E5%8D%8F%E8%AE%AE">了解robots协议</a>
+                                                <a href="https://www.baidu.com/s?wd=robots%E5%8D%8F%E8%AE%AE" target="_blank">了解robots协议</a>
                                             </small>
                                         </div>
                                         <div class="form-group">
@@ -86,10 +85,84 @@
                                             <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="tab-pane" id="image-setting" role="tabpanel">
+                                    <form action="/config/image.do" method="post" name="edit-form" class="edit-form" id="image-form">
+                                        <div class="form-group">
+                                            <label for="web_site_title">开启图片转存</label>
+                                            <div class="form-group">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                            <#if !imageConfig?? || (imageConfig.imageTransfer?? && imageConfig.imageTransfer==0)>
+                                                                checked="checked"
+                                                            </#if>
+                                                            name="imageTransfer" id="image-no" value="0">
+                                                    <label class="form-check-label label-cursor" for="image-no"
+                                                           data-toggle="tooltip" data-placement="bottom"
+                                                           data-original-title="什么都不做, 还是原来的图片URL">什么都不做</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                            <#if  imageConfig?? && imageConfig.imageTransfer?? && imageConfig.imageTransfer==1> checked="checked"</#if>
+                                                           name="imageTransfer" id="image-to-local" value="1" lay-for="#image-config-local">
+                                                    <label class="form-check-label label-cursor" for="image-to-local"
+                                                           data-toggle="tooltip" data-placement="bottom"
+                                                           data-original-title="图片存储到本地,图片src会被替换">存储到本地</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                            <#if imageConfig?? && imageConfig.imageTransfer?? && imageConfig.imageTransfer==2> checked="checked"</#if>
+                                                           name="imageTransfer" id="image-to-cloud" value="2" lay-for="#image-config-cloud">
+                                                    <label class="form-check-label label-cursor" for="image-to-cloud"
+                                                           data-toggle="tooltip" data-placement="bottom"
+                                                           data-original-title="图片存储到云上, src替换成云上src">存储第三方云</label>
+                                                </div>
+                                            </div>
+                                            <div id="image-config-local" class="image-config
+                                            <#if !imageConfig?? || (imageConfig.imageTransfer?? && imageConfig.imageTransfer!=1)>d-none</#if>">
+                                                <div class="form-group">
+                                                    <label for="url_are">
+                                                        图片保存目录（绝对路径）
+                                                    </label>
+                                                    <input name="imageDir" class="form-control" id="image_dir"
+                                                           <#if imageConfig?? && imageConfig.imageDir??>value="${imageConfig.imageDir}"</#if>
+                                                           placeholder="默认/data/zeus"/>
+                                                    <small class="help-block">可设置任意文件夹（必须开启读写权限）
+                                                    </small>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="url_are">
+                                                        图片链接地址（绝对地址）
+                                                    </label>
+                                                    <input name="imageUrl" class="form-control" id="image_dir"
+                                                           <#if imageConfig?? && imageConfig.imageUrl??>value="${imageConfig.imageUrl}"</#if>
+                                                           placeholder="默认http://localhost:8080/data/images"/>
+                                                    <small class="help-block">可设置任意文件夹（必须开启读写权限）
+                                                    </small>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="url_are">
+                                                        图片名称
+                                                    </label>
+                                                    <input name="image_name" class="form-control" id="image_name" value="暂时使用时间日期命名" disabled/>
+                                                    <small class="help-block">可设置任意文件夹（必须开启读写权限）
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            <div id="image-config-cloud" class="image-config d-none">
+暂未实现
 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary m-r-5" id="image-save">确 定</button>
+                                            <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="up-setting" role="tabpanel">
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -102,20 +175,25 @@
 </div>
 
 <script type="text/javascript" src="/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="/js/lib/popper.min.js"></script>
 <script type="text/javascript">
     ;jQuery(function() {
         let nav = $("#nav-main");
         if (!nav) return;
         nav.parent('li').addClass('active');
         nav.parents('.nav-item-has-subnav').addClass('open').first().addClass('active');
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     });
 </script>
-
 <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/lib/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="/js/lib/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="/js/lib/bootstrap-notify.min.js"></script>
 <script type="text/javascript" src="/js/lib/jquery.form.js"></script>
 <script type="text/javascript" src="/js/index.min.js"></script>
+<script type="text/javascript" src="/js/setting.js"></script>
 </body>
 </html>

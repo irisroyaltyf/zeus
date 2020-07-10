@@ -59,14 +59,14 @@ public class ZeusConfigManager {
         return zConfigMapper.updateByPrimaryKeyWithBLOBs(config);
     }
 
-    public void updateConfig(ZConfig config) {
+    public int updateConfig(ZConfig config) {
         ZConfig cachedConfig = getCachedConfig(config.getCname());
         if (cachedConfig != null) {
             cachedConfig.setCdata(config.getCdata());
             cachedConfig.setCtype(cachedConfig.getCtype());
-            updateConfigDb(cachedConfig);
+            return updateConfigDb(cachedConfig);
         } else {
-            insertConfig(config);
+            return insertConfig(config);
         }
     }
 

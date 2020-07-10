@@ -38,3 +38,6 @@ body::-webkit-scrollbar {
     text-align: center;
     white-space: nowrap;
 }
+.label-cursor {
+    cursor: pointer;
+}

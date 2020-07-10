@@ -28,4 +28,10 @@ public class Constants {
 
     public static final int PUBLISH_SUCCESS = 1;
     public static final int PUBLISH_FAILED = 2;
+
+
+    public static final String ZCONFIG_ROBOTS = "ROBOTS";
+    public static final String ZCONFIG_AUTO_COLLECT = "auto_collect";
+    public static final String ZCONFIG_IMAGE_CONFIG = "image_config";
+
 }

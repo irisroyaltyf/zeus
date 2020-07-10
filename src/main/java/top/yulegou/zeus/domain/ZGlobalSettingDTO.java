@@ -22,4 +22,14 @@ import lombok.Data;
 public class ZGlobalSettingDTO {
     private Integer robots;
     private Integer auto;
+
+    //-- 图片设置相关
+    /**
+     * 0. 什么都不做
+     * 1. 存储到本地
+     * 2. 存储到云端
+     */
+    private Integer imageTransfer;
+    private String imageDir;
+    private String imageUrl;
 }

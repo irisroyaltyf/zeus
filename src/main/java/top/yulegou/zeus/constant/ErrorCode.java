@@ -11,6 +11,7 @@ public enum  ErrorCode {
     PUBLISH_RULE_ERROR_DB_CONFIG_STATE(3003, "发布配置状态不正确"),
     OTHER_ERROR_CRON_INVALID(7001, "cron表达式错误"),
     OTHER_ERROR_CRON_EMPTY(7002, "cron表达式为空"),
+    NOT_IMPLEMENTED_YET(9001, "未实现"),
     SYSTEM_ERROR(4004, "系统错误")
     ;
 
