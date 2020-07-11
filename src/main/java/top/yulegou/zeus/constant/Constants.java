@@ -34,4 +34,8 @@ public class Constants {
     public static final String ZCONFIG_AUTO_COLLECT = "auto_collect";
     public static final String ZCONFIG_IMAGE_CONFIG = "image_config";
 
+    public static final String ZCONFIG_IMAGE_TRANSFER = "imageTransfer";
+    public static final String ZCONFIG_IMAGE_DIR = "imageDir";
+
+
 }

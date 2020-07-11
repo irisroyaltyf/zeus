@@ -18,6 +18,7 @@ import top.yulegou.zeus.domain.DbColumnsDTO;
 import java.util.Map;
 
 /**
+ * 一张表 一个DbColumnBindConfig
  * @author irisroyalty
  * @date 2020/6/29
  **/

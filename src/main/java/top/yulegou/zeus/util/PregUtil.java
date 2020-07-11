@@ -12,7 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PregUtil {
-    public static final String HREF_PATTEN = "\\bhref=[\'\"](?<match>[^\'\"<>]+?)[\'\"]";
+    public static final String HREF_PATTERN = "\\bhref=[\'\"](?<match>[^\'\"<>]+?)[\'\"]";
+    public static final String SRC_PATTERN = "<img[^<>]*\\bsrc=[\\\'\\\"]*(\\w+\\:\\/\\/[^'\\\"\\s]+)[\\\'\\\"]*";
     //让配置变成正则pattren
     public static String pregConvertMatchContentOnly(String src) {
         Pattern p = Pattern.compile("(={0,1})(\\s*)([\\\'\\\"]{0,1})\\[内容(?<num>\\d*)\\]\\3");
@@ -107,7 +108,6 @@ public class PregUtil {
 
     /**
      * 将匹配到的内容拼接到一起
-     * @param src
      * @param pattern
      * @return
      */
@@ -121,4 +121,18 @@ public class PregUtil {
         return sb.toString();
     }
 
+
+    /**
+     * 找到img标签的src 字段
+     */
+    public static List<String> matchImgSrcs(String src) {
+        Pattern p = Pattern.compile(SRC_PATTERN);
+        Matcher m = p.matcher(src);
+        List<String> rst = new ArrayList<>();
+        while(m.find()) {
+            System.out.println(m.group());
+            rst.add(m.group(1));
+        }
+        return rst;
+    }
 }

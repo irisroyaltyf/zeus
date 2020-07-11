@@ -38,7 +38,6 @@ public class DbPublishExecutor implements BasePublishExecutor {
     }
     private DbPublishExecutor() {}
 
-
     @Override
     public int getPublishType() {
         return Constants.PUBLISH_RULE_EMPTY;

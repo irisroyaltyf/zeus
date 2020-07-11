@@ -1,5 +1,7 @@
 package top.yulegou.zeus.dao.domain;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 系统配置
  */
@@ -15,6 +17,15 @@ public class ZConfig {
     private Long gmtModified;
 
     private String cdata;
+
+    private JSONObject jsonCData;
+
+    public JSONObject getConfigData(){
+        if (jsonCData == null) {
+            jsonCData = JSONObject.parseObject(cdata);
+        }
+        return jsonCData;
+    }
 
     public ZConfig(Integer id, String cname, Integer ctype, Long gmtCreate, Long gmtModified, String cdata) {
         this.id = id;

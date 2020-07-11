@@ -100,11 +100,11 @@ public class IndexController {
                 return Result.failed(ErrorCode.DB_ERROR_UPDATE_ERROR.getCode(), "数据更新失败，请刷新后重试");
             }
         } else if (zImageConfigDTO.getImageTransfer() == 1) {
-            obj.put("imageTransfer", 1);
+            obj.put(Constants.ZCONFIG_IMAGE_TRANSFER, 1);
             if (StringUtils.isNotEmpty(zImageConfigDTO.getImageDir())) {
-                obj.put("imageDir", zImageConfigDTO.getImageDir());
+                obj.put(Constants.ZCONFIG_IMAGE_DIR, zImageConfigDTO.getImageDir());
             } else {
-                obj.put("imageDir", "/data/zeus");
+                obj.put(Constants.ZCONFIG_IMAGE_DIR, "/data/zeus");
             }
             if (StringUtils.isNotEmpty(zImageConfigDTO.getImageUrl())) {
                 obj.put("imageUrl", zImageConfigDTO.getImageUrl());

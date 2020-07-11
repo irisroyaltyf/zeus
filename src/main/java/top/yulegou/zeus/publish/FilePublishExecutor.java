@@ -13,7 +13,9 @@ package top.yulegou.zeus.publish;/*
  */
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.yulegou.zeus.constant.Constants;
 import top.yulegou.zeus.dao.domain.ZPublishRule;
@@ -23,6 +25,9 @@ import top.yulegou.zeus.dao.domain.publish.FilePublishRuleConfig;
 import top.yulegou.zeus.dao.domain.publish.ZBasePublishRuleConfig;
 import top.yulegou.zeus.domain.ContentCollectedDTO;
 import top.yulegou.zeus.domain.PublishResult;
+import top.yulegou.zeus.manager.ZeusConfigManager;
+import top.yulegou.zeus.manager.http.HttpExecutorManager;
+import top.yulegou.zeus.util.ZeusBeanUtil;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -37,8 +42,14 @@ import java.util.Map;
  **/
 @Slf4j
 public class FilePublishExecutor implements BasePublishExecutor {
+    @Autowired
+    private HttpExecutorManager httpExecutorManager;
+
     private static FilePublishExecutor filePublishExecutor = new FilePublishExecutor();
     public static FilePublishExecutor getPublish() {
+        if (filePublishExecutor.httpExecutorManager == null) {
+            filePublishExecutor.httpExecutorManager = ZeusBeanUtil.getBean(HttpExecutorManager.class);
+        }
         return filePublishExecutor;
     }
     private FilePublishExecutor() {}
@@ -81,6 +92,9 @@ public class FilePublishExecutor implements BasePublishExecutor {
         File f = new File(fileLocation + sdf.format(new Date()) + ".txt");
         FileWriter fileWriter = null;
         try {
+            Integer transfer = ZeusConfigManager.getConfigDetail(Constants.ZCONFIG_IMAGE_CONFIG, Constants.ZCONFIG_IMAGE_TRANSFER);
+            String ImageDir = ZeusConfigManager.getConfigDetail(Constants.ZCONFIG_IMAGE_CONFIG, Constants.ZCONFIG_IMAGE_DIR);
+
             fileWriter = new FileWriter(f, true);
             int rstCount = 0;
             for (ContentCollectedDTO collectedDTO : fieldList) {
@@ -90,8 +104,27 @@ public class FilePublishExecutor implements BasePublishExecutor {
                 for (Iterator<Map.Entry<String, String>> fit = collectedDTO.getFieldsRst().entrySet().iterator();
                      fit.hasNext();) {
                     Map.Entry<String, String> entryField = fit.next();
-                    if (StringUtils.isNotEmpty(entryField.getValue())) {
-                        fileWriter.write(entryField.getValue());
+                    String fieldContent = entryField.getValue();
+                    if (StringUtils.isNotEmpty(fieldContent)) {
+                        if (transfer != null && transfer == 1) {
+                            for (Iterator<String> it = collectedDTO.getFieldImages(entryField.getKey()).iterator();
+                                 it.hasNext(); ) {
+                                String imageUrl = it.next();
+                                String newImage = collectedDTO.getDownload(imageUrl);
+                                if (StringUtils.isNotEmpty(newImage)) {
+                                    fieldContent = RegExUtils.replaceAll(fieldContent, imageUrl, newImage);
+                                } else {
+                                    newImage = httpExecutorManager.download(imageUrl, ImageDir + "/" + task.gettName());
+                                    if (StringUtils.isNotEmpty(newImage)) {
+                                        fieldContent = RegExUtils.replaceAll(fieldContent, imageUrl, newImage);
+                                        collectedDTO.addDownLoad(imageUrl, newImage);
+                                    } else {
+                                        log.error("图片下载失败，没有替换 " + imageUrl);
+                                    }
+                                }
+                            }
+                        }
+                        fileWriter.write(fieldContent);
                         fileWriter.write("\t");
                     }
                     fileWriter.write("\r\n");

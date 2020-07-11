@@ -44,6 +44,6 @@ class BaseCrawlerTest {
         fieldConfig.setFinalMerge("[内容1]");
         fieldConfigList.add(fieldConfig);
         contentConfig.setFieldConfigList(fieldConfigList);
-        contentCrawler.collectField("https://www.techsir.com/a/202006/64449.html", task, contentConfig);
+        contentCrawler.collectField("https://www.techsir.com/a/202006/64449.html", task, contentConfig, false);
     }
 }

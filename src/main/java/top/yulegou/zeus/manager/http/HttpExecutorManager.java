@@ -5,8 +5,12 @@ import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import top.yulegou.zeus.manager.ZeusConfigManager;
+import top.yulegou.zeus.util.ContentTypeUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -108,5 +112,38 @@ public class HttpExecutorManager {
             }
         }
         return "";
+    }
+
+    public String download(String src, String dir) {
+        Request request = new Request.Builder().url(src).build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            InputStream is = response.body().byteStream();
+            String contentType = response.header("Content-type");
+            String suffix = ContentTypeUtil.suffixByContentType(contentType);
+            File fdir = new File(dir);
+            if (!fdir.exists()) {
+                fdir.mkdirs();
+            }
+            String fileName = System.currentTimeMillis() + suffix;
+            File f = new File(dir + "/" + fileName);
+            byte[] buf = new byte[2048];
+            FileOutputStream fos = new FileOutputStream(f);
+            int len = 0;
+            while ((len = is.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+            fos.close();
+            return fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
+        return null;
     }
 }

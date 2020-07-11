@@ -1,10 +1,13 @@
 package top.yulegou.zeus.manager;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import top.yulegou.zeus.dao.domain.ZConfig;
 import top.yulegou.zeus.dao.domain.ZConfigExample;
 import top.yulegou.zeus.dao.mapper.ZConfigMapper;
+import top.yulegou.zeus.util.ZeusBeanUtil;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -72,6 +75,20 @@ public class ZeusConfigManager {
 
     public List<ZConfig> getConfigs(ZConfigExample example) {
         return zConfigMapper.selectByExample(example);
+    }
+
+    public static <T> T getConfigDetail(String configName, String dName) {
+        try {
+            ZeusConfigManager z = ZeusBeanUtil.getBean(ZeusConfigManager.class);
+            ZConfig conf = z.getCachedConfig(configName);
+            if (conf != null) {
+                JSONObject o = JSONObject.parseObject(conf.getCdata());
+                return (T)o.get(dName);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return  null;
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import top.yulegou.zeus.manager.http.HttpExecutorManager;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +42,7 @@ public class PatternTest {
     @Test
     public void matchTest4() {
         String src = httpExecutorManager.doGet("https://www.techsir.com/", null);
-        Pattern  p = Pattern.compile(PregUtil.HREF_PATTEN);
+        Pattern  p = Pattern.compile(PregUtil.HREF_PATTERN);
         Matcher m = p.matcher(src);
         System.out.println(m.matches());
         while(m.find()) {
@@ -75,6 +74,12 @@ public class PatternTest {
         System.out.println(StringUtils.substring("11", 0, 8));
 //        String rst = PregUtil.joinContentMatch("示例：<div id=\"a\">[内容]</div>(*)<div id=\"b\">[内容2]</div>");
 //        System.out.println(rst);
+    }
+
+    @Test
+    public void matchTest7() {
+        String src = httpExecutorManager.doGet("https://www.techsir.com/", null);
+        System.out.println(PregUtil.matchImgSrcs(src));
     }
 
 }

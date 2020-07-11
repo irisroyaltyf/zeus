@@ -1,6 +1,7 @@
 package top.yulegou.zeus.dao.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,4 +37,7 @@ public interface ZTaskMapper {
     int updateByPrimaryKeyWithBLOBs(ZTask record);
 
     int updateByPrimaryKey(ZTask record);
+
+    int updateStatus(Map<String, Object> params);
+
 }

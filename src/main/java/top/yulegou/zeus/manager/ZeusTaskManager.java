@@ -45,6 +45,8 @@ public class ZeusTaskManager {
     private QuartzManager quartzManager;
     @Autowired
     ZeusCollectedManager zeusCollectedManager;
+    @Autowired
+    ZeusConfigManager zeusConfigManager;
 
 
     public Flux<String> collectForController(final Integer taskId) throws Exception {
@@ -96,7 +98,7 @@ public class ZeusTaskManager {
                         JSONObject obj = new JSONObject();
                         // crawer content
                         ContentCollectedDTO contentCollectedDTO =
-                                contentCrawler.collectField(contentUrl, task, ruleConfig.getZCrawlerContentConfig());
+                                contentCrawler.collectField(contentUrl, task, ruleConfig.getZCrawlerContentConfig(), false);
                         if (contentCollectedDTO != null && contentCollectedDTO.isSuccess()) {
                             //此处多scheduler有问题
                             emitter.get().emit(contentCollectedDTO);
@@ -159,6 +161,11 @@ public class ZeusTaskManager {
         // TODO 可以并发下载
         if (urls == null || urls.isEmpty()) {
             log.info("任务 " + task.gettName() + " 起始页为空");
+            return;
+        }
+        if(beginCollect(task) <= 0) {
+            log.info("任务 " + task.gettName() + " 已经执行，跳过本次执行");
+            return ;
         }
         // 1. content url
         final List<String> contentUrls = new ArrayList<>();
@@ -171,6 +178,15 @@ public class ZeusTaskManager {
             contentUrls.addAll(urls);
         }
         // 2. collect content
+        boolean imgNeedTransfer = false;
+        ZConfig imgConfig = zeusConfigManager.getCachedConfig(Constants.ZCONFIG_IMAGE_CONFIG);
+        if (imgConfig != null) {
+            JSONObject object = imgConfig.getConfigData();
+            if (object != null && object.getInteger(Constants.ZCONFIG_IMAGE_TRANSFER) != 0) {
+                imgNeedTransfer = true;
+            }
+        }
+        boolean finalImgNeedTransfer = imgNeedTransfer;
         List<ContentCollectedDTO> collectedDTOS = contentUrls.stream().filter(contentUrl -> {
             if (StringUtils.isEmpty(contentUrl)) {
                 return false;
@@ -178,14 +194,16 @@ public class ZeusTaskManager {
             List<ZTaskCollected> collecteds =
                     zeusCollectedManager.findByUrlMd5(DigestUtils.md5DigestAsHex(contentUrl.getBytes()));
             if (collecteds == null || collecteds.isEmpty()) {
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         }).map((contentUrl -> {
             //TODO 可能需要延迟
             ContentCollectedDTO contentCollectedDTO =
-                    contentCrawler.collectField(contentUrl, task, ruleConfig.getZCrawlerContentConfig());
+                    contentCrawler.collectField(contentUrl, task,
+                            ruleConfig.getZCrawlerContentConfig(), finalImgNeedTransfer);
+//                contentCollectedDTO.getFieldsRst().values().stream().
             return contentCollectedDTO;
         })).sequential().collect(Collectors.toList());
         collectedDTOS.stream().forEach(contentCollectedDTO -> {
@@ -211,7 +229,25 @@ public class ZeusTaskManager {
             }
             zeusCollectedManager.insert(collected);
         });
+        endCollect(task);
     }
+
+    public int beginCollect(ZTask task) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", task.getId());
+        param.put("status", 1);
+        param.put("oldStatus", 0);
+        return zTaskMapper.updateStatus(param);
+    }
+
+    public int endCollect(ZTask task) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", task.getId());
+        param.put("status", 0);
+        param.put("oldStatus", 1);
+        return zTaskMapper.updateStatus(param);
+    }
+
     public void collect(Integer taskId) {
         ZTask task = getTaskById(taskId);
         if (task == null) {

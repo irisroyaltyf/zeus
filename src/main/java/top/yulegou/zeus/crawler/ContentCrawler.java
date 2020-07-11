@@ -18,7 +18,7 @@ public class ContentCrawler extends BaseCrawler {
     @Autowired
     private HttpExecutorManager httpExecutorManager;
     //TODO如果 循环入库则 返回多条数据,如果
-    public ContentCollectedDTO collectField(String url, ZTask task, ZCrawlerContentConfig contentConfig) {
+    public ContentCollectedDTO collectField(String url, ZTask task, ZCrawlerContentConfig contentConfig, boolean transferImage) {
         // TODO URL 判断是否重复抓取, 还是可以重复抓取 表collected
         // TODO 如果需要的话 sleep一段时间按
         ContentCollectedDTO contentCollectedDTO = new ContentCollectedDTO();
@@ -55,7 +55,14 @@ public class ContentCrawler extends BaseCrawler {
             if (fieldConfig.getType() == 1) {
                 List<String> f = pregAndMatch(contentHtml, PregUtil.pregConvertMatch(fieldConfig.getRule()), fieldConfig.getFinalMerge());
                 //TODO 现在只是用逗号链接起来
+                String fieldRst = StringUtils.join(f, ",");
                 contentCollectedDTO.addFieldResult(fieldConfig.getName(), StringUtils.join(f, ","));
+                if (transferImage) {
+                    /**
+                     * 替换的过程仅仅是 replace 如果页面显示的话也会被替换
+                     */
+                    contentCollectedDTO.addImages(fieldConfig.getName(), PregUtil.matchImgSrcs(fieldRst));
+                }
             }
         }
         contentCollectedDTO.setSuccess(true);

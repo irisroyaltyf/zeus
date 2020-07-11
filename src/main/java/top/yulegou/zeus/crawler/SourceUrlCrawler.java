@@ -80,7 +80,7 @@ public class SourceUrlCrawler extends BaseCrawler {
         String urlPattern;
         if (urlConfig == null
                 || StringUtils.isEmpty(urlConfig.getContentUrlRule())) {
-            urlPattern = PregUtil.HREF_PATTEN;
+            urlPattern = PregUtil.HREF_PATTERN;
         } else {
             urlPattern = PregUtil.pregConvertMatch(urlConfig.getContentUrlRule());
         }

@@ -95,6 +95,9 @@
   <sql id="Blob_Column_List">
     t_config
   </sql>
+  <update id="updateStatus" parameterType="java.util.Map">
+    update zeus_task set status = ${status} where id = ${id} and status = ${oldStatus};
+  </update>
   <select id="selectByExampleWithBLOBs" parameterType="top.yulegou.zeus.dao.domain.ZTaskExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">

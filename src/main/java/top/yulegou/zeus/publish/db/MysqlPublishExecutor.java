@@ -14,8 +14,10 @@ package top.yulegou.zeus.publish.db;/*
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import top.yulegou.zeus.constant.Constants;
 import top.yulegou.zeus.dao.domain.ZPublishRule;
 import top.yulegou.zeus.dao.domain.ZTask;
 import top.yulegou.zeus.dao.domain.publish.DbColumnBindConfig;
@@ -24,11 +26,14 @@ import top.yulegou.zeus.dao.domain.publish.DbPublishRuleConfig;
 import top.yulegou.zeus.dao.domain.publish.DbTableConfig;
 import top.yulegou.zeus.domain.ContentCollectedDTO;
 import top.yulegou.zeus.domain.PublishResult;
+import top.yulegou.zeus.manager.ZeusConfigManager;
 import top.yulegou.zeus.manager.db.MysqlManager;
+import top.yulegou.zeus.manager.http.HttpExecutorManager;
 import top.yulegou.zeus.util.ZeusBeanUtil;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +45,16 @@ import java.util.Map;
 public class MysqlPublishExecutor {
     @Autowired
     private MysqlManager mysqlManager;
+    @Autowired
+    private HttpExecutorManager httpExecutorManager;
 
     private static MysqlPublishExecutor mysqlPublishExecutor = new MysqlPublishExecutor();
     public static MysqlPublishExecutor getPublish() {
         if (mysqlPublishExecutor.mysqlManager == null) {
             mysqlPublishExecutor.mysqlManager = ZeusBeanUtil.getBean(MysqlManager.class);
+        }
+        if (mysqlPublishExecutor.httpExecutorManager == null) {
+            mysqlPublishExecutor.httpExecutorManager = ZeusBeanUtil.getBean(HttpExecutorManager.class);
         }
         return mysqlPublishExecutor;
     }
@@ -60,12 +70,16 @@ public class MysqlPublishExecutor {
         }
         StringBuilder sb = new StringBuilder();
         boolean err = false;
+
+        Integer transfer = ZeusConfigManager.getConfigDetail(Constants.ZCONFIG_IMAGE_CONFIG, Constants.ZCONFIG_IMAGE_TRANSFER);
+        String ImageDir = ZeusConfigManager.getConfigDetail(Constants.ZCONFIG_IMAGE_CONFIG, Constants.ZCONFIG_IMAGE_DIR);
         for (DbColumnBindConfig tableField : tableConfig.getTableFields()) {
             tableField.getTableName();
             if (tableField.getFieldBind() == null
                     || tableField.getFieldBind().isEmpty()) {
                 continue;
             }
+
             Map<String, String> insertKeyValue = new HashMap<>();
             tableField.getFieldBind().forEach((x, y)-> {
                 String realKey = null;
@@ -73,6 +87,24 @@ public class MysqlPublishExecutor {
                 if (StringUtils.startsWith(y, "field:")) {
                     realKey = StringUtils.substring(y, 6);
                     fieldContent = content.getFieldsRst().get(realKey);
+                    if (transfer != null && transfer == 1) {
+                        for (Iterator<String> it = content.getFieldImages(realKey).iterator();
+                             it.hasNext(); ) {
+                            String imageUrl = it.next();
+                            String newImage = content.getDownload(imageUrl);
+                            if (StringUtils.isNotEmpty(newImage)) {
+                                fieldContent = RegExUtils.replaceAll(fieldContent, imageUrl, newImage);
+                            } else {
+                                newImage = httpExecutorManager.download(imageUrl, ImageDir + "/" + zTask.gettName());
+                                if (StringUtils.isNotEmpty(newImage)) {
+                                    fieldContent = RegExUtils.replaceAll(fieldContent, imageUrl, newImage);
+                                    content.addDownLoad(imageUrl, newImage);
+                                } else {
+                                    log.error("图片下载失败，没有替换 " + imageUrl);
+                                }
+                            }
+                        }
+                    }
                 } else if (StringUtils.startsWith(y, "custom:")) {
                     fieldContent = StringUtils.substring(y, 7);
                 }
