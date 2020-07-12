@@ -100,12 +100,22 @@
                                             <label for="fileType">文件格式</label>
                                             <div class="custom-control">
                                                 <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="fileType" class="custom-control-input" value="txt" id="radio_f_txt">
-                                                    <label class="custom-control-label" for="radio_f_txt"> txt</label>
+                                                    <input type="radio" name="fileType"
+                                                           <#if ruleConfig?? && ruleConfig.fileType ?? && ruleConfig.fileType == "txt">checked="checked"</#if>
+                                                           class="custom-control-input" value="txt" id="radio_f_txt">
+                                                    <label class="custom-control-label" for="radio_f_txt">txt文本格式</label>
                                                 </div>
                                                 <div class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="fileType" class="custom-control-input" value="xls" id="radio_f_xls">
-                                                   <label class="custom-control-label" for="radio_f_xls">xls</label>
+                                                    <input type="radio" name="fileType"
+                                                           <#if ruleConfig?? && ruleConfig.fileType ?? && ruleConfig.fileType == "xls">checked="checked"</#if>
+                                                           class="custom-control-input" value="xls" id="radio_f_xls">
+                                                   <label class="custom-control-label" for="radio_f_xls">Excel2003(.xls)</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" name="fileType"
+                                                           <#if ruleConfig?? && ruleConfig.fileType ?? && ruleConfig.fileType == "xlsx">checked="checked"</#if>
+                                                           class="custom-control-input" value="xlsx" id="radio_f_xlsx">
+                                                    <label class="custom-control-label" for="radio_f_xlsx">Excel2007(.xlsx)</label>
                                                 </div>
                                             </div>
                                         </div>

@@ -154,7 +154,7 @@ public class PublishController extends BaseController{
                                 : publishDTO.getFileLocation() + "/");
             }
             ruleConfig.setType(1);
-            ruleConfig.setFileType("txt");
+            ruleConfig.setFileType(publishDTO.getFileType());
             publishRule.setRuleConfig(ruleConfig);
             publishRule.setType(1);
         } else if (publishDTO.getPublishType() == 2) {
