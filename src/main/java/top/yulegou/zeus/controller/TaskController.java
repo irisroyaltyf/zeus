@@ -148,6 +148,7 @@ public class TaskController extends BaseController {
                         return fieldConfig;
                     }).collect(Collectors.toList());
                     model.addAttribute("fieldList", fieldList);
+                    model.addAttribute("ispost", contentConfig.isPost());
                 }
             }
         }
@@ -273,6 +274,7 @@ public class TaskController extends BaseController {
             contentConfig = new ZCrawlerContentConfig();
             ruleConfig.setZCrawlerContentConfig(contentConfig);
         }
+        contentConfig.setPost(crawlerContentDTO.getUsePost() != null && crawlerContentDTO.getUsePost() == 1);
         if (crawlerContentDTO.getField() == null || crawlerContentDTO.getField().isEmpty()) {
             contentConfig.setFieldConfigList(null);
         } else {

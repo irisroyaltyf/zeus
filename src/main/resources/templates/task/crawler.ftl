@@ -324,7 +324,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary m-r-5 save" data="content-url">确 定</button>
                                     <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
@@ -337,6 +336,31 @@
                                 <#if crawlerRule??>
                                     <input type="hidden" value="${crawlerRule.id}" name="crawlerId" />
                                 </#if>
+                                <div class="card">
+                                    <header class="card-header">
+                                        <div class="card-title"><a href="javascript:;" class="card-btn-slide-m">post模式</a></div>
+                                        <ul class="card-actions">
+                                            <#--                                    <li><a href="#!" class="card-btn-close"><i class="mdi mdi-close"></i></a></li>-->
+                                            <li><a href="#!" class="card-btn-slide rotate-180"><i class="mdi mdi-chevron-up"></i></a></li>
+                                        </ul>
+                                    </header>
+                                    <div class="card-body" style="display: none">
+                                        <div class="form-group">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                        <#if ispost?? && ispost==true>checked="checked"</#if>
+                                                       name="usePost" id="auto-yes" value="1">
+                                                <label class="form-check-label" for="auto-yes">开启</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                       <#if ispost?? && ispost == true><#else>checked="checked"</#if>
+                                                       name="usePost" id="post-no" value="0">
+                                                <label class="form-check-label" for="auto-no">关闭</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-header"><div class="card-title">字段列表<a href="javascript:;" class="add-field" title="添加" style="margin-left: 5px;" data-toggle="modal" data-target="#fieldModal"><img src="/imgs/plus.svg" width="18px" height="18px"></img></a></div></div>
                                     <div class="card-body">

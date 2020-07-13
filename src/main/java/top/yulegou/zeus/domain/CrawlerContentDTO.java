@@ -13,4 +13,5 @@ public class CrawlerContentDTO {
     private Integer taskId;
     private Integer crawlerId;
     private List<String> field;
+    Integer usePost;
 }

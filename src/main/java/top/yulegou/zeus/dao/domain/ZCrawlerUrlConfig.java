@@ -7,4 +7,5 @@ public class ZCrawlerUrlConfig {
     private String contentArea;
     private String contentUrlRule;
     private String finalMergeRule;
+    private Boolean usePost;
 }
